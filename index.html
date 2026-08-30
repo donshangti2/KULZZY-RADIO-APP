@@ -25,9 +25,9 @@
 
 <style>
 
-/* =========================================
+/* =====================================================
    BASIC RESET
-========================================= */
+===================================================== */
 
 *{
     box-sizing:border-box;
@@ -60,9 +60,9 @@ body{
 }
 
 
-/* =========================================
-   KULZZY NAVIGATION
-========================================= */
+/* =====================================================
+   FLOATING NAVIGATION
+===================================================== */
 
 #kulzzyNav{
 
@@ -106,9 +106,9 @@ body{
 }
 
 
-/* =========================================
+/* =====================================================
    NAVIGATION BUTTONS
-========================================= */
+===================================================== */
 
 .kulzzyNavBtn{
 
@@ -158,9 +158,9 @@ body{
 }
 
 
-/* =========================================
-   APP CONTENT
-========================================= */
+/* =====================================================
+   MAIN CONTENT
+===================================================== */
 
 #kulzzyContent{
 
@@ -171,14 +171,14 @@ body{
     padding:
         70px
         12px
-        40px;
+        120px;
 
 }
 
 
-/* =========================================
+/* =====================================================
    SECTIONS
-========================================= */
+===================================================== */
 
 .kulzzySection{
 
@@ -199,9 +199,9 @@ body{
 }
 
 
-/* =========================================
-   PUBLISHED FIREBASE CONTENT
-========================================= */
+/* =====================================================
+   FIREBASE CONTENT
+===================================================== */
 
 .kulzzyPublishedContent{
 
@@ -256,9 +256,9 @@ body{
 }
 
 
-/* =========================================
+/* =====================================================
    MORE MENU
-========================================= */
+===================================================== */
 
 #kulzzyMorePagesMenu{
 
@@ -277,9 +277,9 @@ body{
 }
 
 
-/* =========================================
+/* =====================================================
    MORE BUTTON
-========================================= */
+===================================================== */
 
 .kulzzyMorePageButton{
 
@@ -331,9 +331,9 @@ body{
 }
 
 
-/* =========================================
+/* =====================================================
    MORE CONTENT
-========================================= */
+===================================================== */
 
 #kulzzyMorePageContent{
 
@@ -435,9 +435,420 @@ body{
 }
 
 
-/* =========================================
+/* =====================================================
+   FLOATING RADIO PLAYER
+===================================================== */
+
+#radioPlayer{
+
+    position:fixed;
+
+    left:8px;
+
+    right:8px;
+
+    bottom:8px;
+
+    width:auto;
+
+    max-width:700px;
+
+    margin:auto;
+
+    background:
+        linear-gradient(
+            180deg,
+            #03182c 0%,
+            #020d1a 100%
+        );
+
+    color:white;
+
+    border:
+        2px solid
+        #ffd000;
+
+    border-radius:16px;
+
+    overflow:hidden;
+
+    z-index:999998;
+
+    box-shadow:
+        0 5px 25px
+        rgba(0,0,0,.55);
+
+}
+
+
+/* =====================================================
+   PLAYER HEADER
+===================================================== */
+
+.kulzzyHeader{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    width:100%;
+
+    padding:
+        9px 12px;
+
+    background:#03182c;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.12);
+
+}
+
+.brand{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    min-width:0;
+
+}
+
+.redDot{
+
+    width:14px;
+
+    height:14px;
+
+    min-width:14px;
+
+    background:#ff0015;
+
+    border-radius:50%;
+
+    box-shadow:
+        0 0 8px #ff0015,
+        0 0 16px
+        rgba(255,0,21,.7);
+
+}
+
+.brandName{
+
+    color:#ffd000;
+
+    font-size:14px;
+
+    font-weight:800;
+
+    white-space:nowrap;
+
+}
+
+.slogan{
+
+    margin-top:2px;
+
+    color:#b7c3ce;
+
+    font-size:9px;
+
+}
+
+.liveBadge{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:4px;
+
+    background:#ff0015;
+
+    color:white;
+
+    padding:
+        6px 9px;
+
+    border-radius:20px;
+
+    font-size:10px;
+
+    font-weight:bold;
+
+    white-space:nowrap;
+
+}
+
+
+/* =====================================================
+   PLAYER CONTENT
+===================================================== */
+
+.playerContent{
+
+    width:100%;
+
+    text-align:center;
+
+    padding:
+        7px 10px 8px;
+
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.statusText{
+
+    color:#ffd000;
+
+    font-size:10px;
+
+    font-weight:bold;
+
+    margin-bottom:4px;
+
+}
+
+
+/* =====================================================
+   PLAY BUTTON
+===================================================== */
+
+#bigPlayButton{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    width:48px;
+
+    height:48px;
+
+    margin:3px auto 5px;
+
+    padding:0;
+
+    border-radius:50%;
+
+    border:
+        3px solid
+        #ffd000;
+
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            #ff5050,
+            #ed0015 45%,
+            #b90010 100%
+        );
+
+    color:white;
+
+    font-size:22px;
+
+    line-height:1;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 0 10px
+        rgba(255,0,0,.8),
+        0 0 20px
+        rgba(255,0,0,.35);
+
+    -webkit-tap-highlight-color:
+        transparent;
+
+}
+
+#bigPlayButton:active{
+
+    transform:scale(.93);
+
+}
+
+#bigPlayButton.playing{
+
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            #36ff75,
+            #00a83b 45%,
+            #006b28 100%
+        );
+
+}
+
+.buttonLabel{
+
+    color:#fff;
+
+    font-size:10px;
+
+    font-weight:bold;
+
+}
+
+
+/* =====================================================
+   NOW PLAYING
+===================================================== */
+
+.nowPlaying{
+
+    width:96%;
+
+    max-width:600px;
+
+    margin:5px auto 0;
+
+    padding:5px 8px;
+
+    color:#c7d0d9;
+
+    background:
+        rgba(255,255,255,.04);
+
+    border:
+        1px solid
+        rgba(255,208,0,.3);
+
+    border-radius:7px;
+
+    font-size:9px;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+}
+
+
+/* =====================================================
+   HIDDEN AUDIO
+===================================================== */
+
+#audioPlayer{
+
+    display:none;
+
+}
+
+
+/* =====================================================
+   CASTER LIVE
+===================================================== */
+
+#casterLive{
+
+    width:100%;
+
+    max-width:700px;
+
+    margin:5px auto;
+
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+.footer{
+
+    width:100%;
+
+    padding:
+        3px 5px 5px;
+
+    text-align:center;
+
+    color:#687989;
+
+    font-size:7px;
+
+}
+
+.footer span{
+
+    color:#ffd000;
+
+}
+
+
+/* =====================================================
    MOBILE
-========================================= */
+===================================================== */
+
+@media(max-width:600px){
+
+    #radioPlayer{
+
+        left:5px;
+
+        right:5px;
+
+        bottom:5px;
+
+        border-radius:14px;
+
+    }
+
+    .brandName{
+
+        font-size:12px;
+
+    }
+
+    .slogan{
+
+        font-size:8px;
+
+    }
+
+    .redDot{
+
+        width:12px;
+
+        height:12px;
+
+        min-width:12px;
+
+    }
+
+    .liveBadge{
+
+        padding:
+            5px 7px;
+
+        font-size:9px;
+
+    }
+
+    #bigPlayButton{
+
+        width:45px;
+
+        height:45px;
+
+        font-size:20px;
+
+    }
+
+}
+
 
 @media(max-width:360px){
 
@@ -464,16 +875,29 @@ body{
 
         padding-top:62px;
 
+        padding-bottom:115px;
+
     }
 
 }
 
-@media(min-width:361px)
-and (max-width:600px){
 
-    .kulzzyNavBtn{
+/* =====================================================
+   DESKTOP PLAYER
+===================================================== */
 
-        font-size:10px;
+@media(min-width:701px){
+
+    #radioPlayer{
+
+        left:50%;
+
+        right:auto;
+
+        transform:translateX(-50%);
+
+        width:
+            calc(100% - 20px);
 
     }
 
@@ -487,9 +911,9 @@ and (max-width:600px){
 <body>
 
 
-<!-- =====================================
-     KULZZY RADIO NAVIGATION
-===================================== -->
+<!-- =====================================================
+     KULZZY NAVIGATION
+===================================================== -->
 
 <nav id="kulzzyNav">
 
@@ -545,14 +969,12 @@ and (max-width:600px){
 </nav>
 
 
-<!-- =====================================
-     KULZZY RADIO CONTENT
-===================================== -->
+<!-- =====================================================
+     KULZZY CONTENT
+===================================================== -->
 
 <div id="kulzzyContent">
 
-
-    <!-- HOME -->
 
     <section
         id="kulzzy-home"
@@ -566,8 +988,6 @@ and (max-width:600px){
     </section>
 
 
-    <!-- REQUEST -->
-
     <section
         id="kulzzy-request"
         class="kulzzySection">
@@ -579,8 +999,6 @@ and (max-width:600px){
 
     </section>
 
-
-    <!-- WISHES -->
 
     <section
         id="kulzzy-wishes"
@@ -594,8 +1012,6 @@ and (max-width:600px){
     </section>
 
 
-    <!-- MARKET -->
-
     <section
         id="kulzzy-market"
         class="kulzzySection">
@@ -608,8 +1024,6 @@ and (max-width:600px){
     </section>
 
 
-    <!-- MORE -->
-
     <section
         id="kulzzy-more"
         class="kulzzySection">
@@ -617,7 +1031,6 @@ and (max-width:600px){
         <div
             id="kulzzyMorePagesMenu">
         </div>
-
 
         <div
             id="kulzzyMorePageContent">
@@ -629,9 +1042,133 @@ and (max-width:600px){
 </div>
 
 
-<!-- =====================================
-     FIREBASE
-===================================== -->
+<!-- =====================================================
+     FLOATING RADIO PLAYER
+===================================================== -->
+
+<div id="radioPlayer">
+
+
+    <div class="kulzzyHeader">
+
+        <div class="brand">
+
+            <div class="redDot"></div>
+
+            <div>
+
+                <div class="brandName">
+                    KULZZY RADIO NETWORK
+                </div>
+
+                <div class="slogan">
+                    Celebrating Lives Everyday
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="liveBadge">
+            ● LIVE
+        </div>
+
+    </div>
+
+
+    <div class="playerContent">
+
+
+        <div
+            id="statusText"
+            class="statusText"
+            style="display:none;">
+        </div>
+
+
+        <button
+            id="bigPlayButton"
+            type="button">
+
+            ▶
+
+        </button>
+
+
+        <div
+            id="buttonLabel"
+            class="buttonLabel"
+            style="display:none;">
+        </div>
+
+
+        <div
+            id="nowPlaying"
+            class="nowPlaying">
+
+            Kulzzy Radio Network • Celebrating Lives Everyday
+
+        </div>
+
+
+        <audio
+            id="audioPlayer"
+            preload="auto"
+            playsinline>
+        </audio>
+
+
+        <div
+            id="casterLive"
+            style="display:none;">
+
+            <div
+                data-type="newStreamPlayer"
+                data-publicToken="8c96ae48-5e72-43d8-a87e-e90f623ac080"
+                data-theme="dark"
+                data-color="e81e4d"
+                data-channelId="a272a955-fc0c-4968-8280-2a2cb7e434ec"
+                data-rendered="false"
+                class="cstrEmbed">
+
+                <a href="https://www.caster.fm">
+                    Shoutcast Hosting
+                </a>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <div class="footer">
+
+        KULZZY RADIO NETWORK •
+        <span>
+            Celebrating Lives Everyday
+        </span>
+
+    </div>
+
+
+</div>
+
+
+<!-- =====================================================
+     CASTER SCRIPT
+===================================================== -->
+
+<script
+src="https://cdn.cloud.caster.fm/widgets/embed.js">
+</script>
+
+
+<!-- =====================================================
+     FIREBASE + NAVIGATION
+===================================================== -->
 
 <script type="module">
 
@@ -659,9 +1196,9 @@ from
 "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
 
 
-/* =========================================
+/* =====================================================
    FIREBASE CONFIG
-========================================= */
+===================================================== */
 
 const firebaseConfig = {
 
@@ -688,10 +1225,6 @@ const firebaseConfig = {
 
 };
 
-
-/* =========================================
-   FIREBASE INITIALIZATION
-========================================= */
 
 let db = null;
 
@@ -720,9 +1253,9 @@ catch(error){
 }
 
 
-/* =========================================
-   NORMAL SECTIONS
-========================================= */
+/* =====================================================
+   SECTIONS
+===================================================== */
 
 const normalSections = [
 
@@ -734,21 +1267,20 @@ const normalSections = [
 ];
 
 
-/* =========================================
-   FAST MEMORY CACHE
-========================================= */
+/* =====================================================
+   CACHE
+===================================================== */
 
 const sectionCache =
     Object.create(null);
-
 
 const sectionLoading =
     Object.create(null);
 
 
-/* =========================================
+/* =====================================================
    MORE CACHE
-========================================= */
+===================================================== */
 
 let morePagesLoaded =
     false;
@@ -760,9 +1292,9 @@ let morePagesData =
     [];
 
 
-/* =========================================
+/* =====================================================
    GET PAGE HTML
-========================================= */
+===================================================== */
 
 function getPageHTML(page){
 
@@ -906,9 +1438,9 @@ function getPageHTML(page){
 }
 
 
-/* =========================================
+/* =====================================================
    EXECUTE PUBLISHED SCRIPTS
-========================================= */
+===================================================== */
 
 function executePublishedScripts(
     container
@@ -973,9 +1505,9 @@ function executePublishedScripts(
 }
 
 
-/* =========================================
-   DISPLAY CONTENT
-========================================= */
+/* =====================================================
+   DISPLAY NORMAL CONTENT
+===================================================== */
 
 function displayNormalContent(
     section,
@@ -999,7 +1531,10 @@ function displayNormalContent(
     }
 
 
-    if(!html || !html.trim()){
+    if(
+        !html ||
+        !html.trim()
+    ){
 
         container.innerHTML = "";
 
@@ -1039,9 +1574,9 @@ function displayNormalContent(
 }
 
 
-/* =========================================
+/* =====================================================
    FAST FIREBASE SECTION LOAD
-========================================= */
+===================================================== */
 
 async function loadNormalSection(
     section
@@ -1076,7 +1611,7 @@ async function loadNormalSection(
 
 
     /*
-       Return immediately if cached.
+       CACHE HIT
     */
 
     if(
@@ -1102,8 +1637,7 @@ async function loadNormalSection(
 
 
     /*
-       Prevent duplicate Firebase
-       requests.
+       DUPLICATE REQUEST PROTECTION
     */
 
     if(
@@ -1123,7 +1657,7 @@ async function loadNormalSection(
 
 
     /*
-       Start request immediately.
+       FIREBASE REQUEST
     */
 
     sectionLoading[section] =
@@ -1199,9 +1733,9 @@ async function loadNormalSection(
 }
 
 
-/* =========================================
+/* =====================================================
    OPEN SECTION
-========================================= */
+===================================================== */
 
 function openSection(
     section,
@@ -1283,9 +1817,9 @@ function openSection(
 }
 
 
-/* =========================================
+/* =====================================================
    PUBLIC NAVIGATION
-========================================= */
+===================================================== */
 
 window.kulzzyOpen =
 
@@ -1302,9 +1836,9 @@ window.kulzzyOpen =
     };
 
 
-/* =========================================
+/* =====================================================
    NAVIGATION EVENTS
-========================================= */
+===================================================== */
 
 document
     .querySelectorAll(
@@ -1330,9 +1864,9 @@ document
     });
 
 
-/* =========================================
+/* =====================================================
    LOAD MORE PAGES
-========================================= */
+===================================================== */
 
 async function loadMorePages(){
 
@@ -1410,7 +1944,8 @@ async function loadMorePages(){
                 !snapshot.exists()
             ){
 
-                morePagesLoaded = true;
+                morePagesLoaded =
+                    true;
 
                 return;
 
@@ -1549,9 +2084,9 @@ async function loadMorePages(){
 }
 
 
-/* =========================================
+/* =====================================================
    SHOW MORE PAGE
-========================================= */
+===================================================== */
 
 function showMorePage(
     page,
@@ -1639,9 +2174,9 @@ function showMorePage(
 }
 
 
-/* =========================================
-   START HOME IMMEDIATELY
-========================================= */
+/* =====================================================
+   START HOME
+===================================================== */
 
 if(db){
 
@@ -1652,9 +2187,9 @@ if(db){
 }
 
 
-/* =========================================
+/* =====================================================
    QUIET BACKGROUND PRELOAD
-========================================= */
+===================================================== */
 
 setTimeout(function(){
 
@@ -1669,6 +2204,7 @@ setTimeout(function(){
         "request",
         "wishes",
         "market"
+
     ]
 
     .forEach(function(section){
@@ -1680,6 +2216,724 @@ setTimeout(function(){
     });
 
 },1200);
+
+</script>
+
+
+<!-- =====================================================
+     KULZZY RADIO PLAYER JAVASCRIPT
+===================================================== -->
+
+<script>
+
+const CONFIG_URL = "config.json";
+
+
+const audio =
+    document.getElementById(
+        "audioPlayer"
+    );
+
+
+const playButton =
+    document.getElementById(
+        "bigPlayButton"
+    );
+
+
+const buttonLabel =
+    document.getElementById(
+        "buttonLabel"
+    );
+
+
+const statusText =
+    document.getElementById(
+        "statusText"
+    );
+
+
+const nowPlaying =
+    document.getElementById(
+        "nowPlaying"
+    );
+
+
+const casterLive =
+    document.getElementById(
+        "casterLive"
+    );
+
+
+let currentAudio = "";
+
+let currentMode = "";
+
+let currentPlayMode =
+    "REPEAT";
+
+let userHasStartedAudio =
+    false;
+
+let randomizing =
+    false;
+
+
+/* =====================================================
+   LOAD CONFIG
+===================================================== */
+
+async function loadConfig(){
+
+    try{
+
+        const response =
+            await fetch(
+
+                CONFIG_URL +
+                "?t=" +
+                Date.now(),
+
+                {
+                    cache:
+                        "no-store"
+                }
+
+            );
+
+
+        if(!response.ok){
+
+            throw new Error(
+                "Config could not be loaded"
+            );
+
+        }
+
+
+        const config =
+            await response.json();
+
+
+        if(
+
+            config.nowPlaying &&
+
+            config.nowPlaying.trim() !== ""
+
+        ){
+
+            nowPlaying.textContent =
+                config.nowPlaying;
+
+        }
+
+        else{
+
+            nowPlaying.textContent =
+                "Kulzzy Radio Network • Celebrating Lives Everyday";
+
+        }
+
+
+        currentPlayMode =
+            String(
+                config.playMode ||
+                "REPEAT"
+            ).toUpperCase();
+
+
+        if(
+
+            String(
+                config.status
+            ).toUpperCase()
+            ===
+            "LIVE"
+
+        ){
+
+            switchToLive();
+
+        }
+
+        else{
+
+            switchToAudio(
+                config.currentAudio
+            );
+
+        }
+
+    }
+
+    catch(error){
+
+        console.log(
+            "Kulzzy player:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   LIVE MODE
+===================================================== */
+
+function switchToLive(){
+
+    if(
+        currentMode === "LIVE"
+    ){
+
+        return;
+
+    }
+
+
+    currentMode =
+        "LIVE";
+
+
+    audio.pause();
+
+    audio.removeAttribute(
+        "src"
+    );
+
+    audio.load();
+
+
+    casterLive.style.display =
+        "block";
+
+
+    playButton.style.display =
+        "none";
+
+
+    buttonLabel.style.display =
+        "none";
+
+
+    statusText.style.display =
+        "block";
+
+
+    statusText.textContent =
+        "🔴 LIVE ON AIR";
+
+}
+
+
+/* =====================================================
+   AUDIO MODE
+===================================================== */
+
+function switchToAudio(
+    audioFile
+){
+
+    if(!audioFile){
+
+        return;
+
+    }
+
+
+    currentMode =
+        "AUDIO";
+
+
+    casterLive.style.display =
+        "none";
+
+
+    playButton.style.display =
+        "flex";
+
+
+    buttonLabel.style.display =
+        "block";
+
+
+    statusText.style.display =
+        "block";
+
+
+    statusText.textContent =
+        "🎵 AUTOMATIC AUDIO";
+
+
+    if(
+        currentAudio !== audioFile
+    ){
+
+        const wasPlaying =
+            !audio.paused &&
+            !audio.ended;
+
+
+        currentAudio =
+            audioFile;
+
+
+        audio.pause();
+
+
+        audio.src =
+            audioFile +
+            "?v=" +
+            Date.now();
+
+
+        audio.load();
+
+
+        playButton.classList.remove(
+            "playing"
+        );
+
+
+        playButton.textContent =
+            "▶";
+
+
+        buttonLabel.textContent =
+            "TAP TO PLAY";
+
+
+        if(wasPlaying){
+
+            userHasStartedAudio =
+                true;
+
+        }
+
+    }
+
+}
+
+
+/* =====================================================
+   RANDOM POSITION
+===================================================== */
+
+function getRandomStartPosition(){
+
+    const duration =
+        audio.duration;
+
+
+    if(
+        !Number.isFinite(duration) ||
+        duration <= 0
+    ){
+
+        return 0;
+
+    }
+
+
+    const safeEnd =
+        Math.max(
+            0,
+            duration - 0.5
+        );
+
+
+    if(
+        safeEnd <= 0
+    ){
+
+        return 0;
+
+    }
+
+
+    return Math.random() *
+           safeEnd;
+
+}
+
+
+/* =====================================================
+   SET RANDOM POSITION
+===================================================== */
+
+function setRandomPosition(){
+
+    if(
+
+        !Number.isFinite(
+            audio.duration
+        ) ||
+
+        audio.duration <= 0
+
+    ){
+
+        return false;
+
+    }
+
+
+    const randomPosition =
+        getRandomStartPosition();
+
+
+    try{
+
+        audio.currentTime =
+            randomPosition;
+
+        return true;
+
+    }
+
+    catch(error){
+
+        console.log(
+            "Random position error:",
+            error
+        );
+
+        return false;
+
+    }
+
+}
+
+
+/* =====================================================
+   RANDOM RESTART
+===================================================== */
+
+async function randomRestartAndPlay(){
+
+    if(randomizing){
+
+        return;
+
+    }
+
+
+    randomizing =
+        true;
+
+
+    try{
+
+        if(
+
+            !Number.isFinite(
+                audio.duration
+            ) ||
+
+            audio.duration <= 0
+
+        ){
+
+            await new Promise(
+                function(resolve){
+
+                    let finished =
+                        false;
+
+
+                    function done(){
+
+                        if(finished){
+
+                            return;
+
+                        }
+
+
+                        finished =
+                            true;
+
+
+                        clearTimeout(
+                            timer
+                        );
+
+
+                        audio.removeEventListener(
+                            "loadedmetadata",
+                            done
+                        );
+
+
+                        resolve();
+
+                    }
+
+
+                    const timer =
+                        setTimeout(
+                            done,
+                            5000
+                        );
+
+
+                    audio.addEventListener(
+
+                        "loadedmetadata",
+
+                        done,
+
+                        {
+                            once:true
+                        }
+
+                    );
+
+                }
+            );
+
+        }
+
+
+        if(
+
+            !Number.isFinite(
+                audio.duration
+            ) ||
+
+            audio.duration <= 0
+
+        ){
+
+            await audio.play();
+
+        }
+
+        else{
+
+            setRandomPosition();
+
+
+            await new Promise(
+                function(resolve){
+
+                    requestAnimationFrame(
+                        resolve
+                    );
+
+                }
+            );
+
+
+            await audio.play();
+
+        }
+
+
+        userHasStartedAudio =
+            true;
+
+
+        playButton.classList.add(
+            "playing"
+        );
+
+
+        playButton.textContent =
+            "❚❚";
+
+
+        buttonLabel.textContent =
+            "NOW PLAYING";
+
+    }
+
+    catch(error){
+
+        console.log(
+            "Random repeat error:",
+            error
+        );
+
+    }
+
+    finally{
+
+        randomizing =
+            false;
+
+    }
+
+}
+
+
+/* =====================================================
+   PLAY BUTTON
+===================================================== */
+
+playButton.addEventListener(
+    "click",
+    async function(){
+
+        if(
+            currentMode !== "AUDIO"
+        ){
+
+            return;
+
+        }
+
+
+        try{
+
+            if(audio.paused){
+
+                if(
+                    !userHasStartedAudio
+                ){
+
+                    await randomRestartAndPlay();
+
+                }
+
+                else{
+
+                    await audio.play();
+
+
+                    playButton.classList.add(
+                        "playing"
+                    );
+
+
+                    playButton.textContent =
+                        "❚❚";
+
+
+                    buttonLabel.textContent =
+                        "NOW PLAYING";
+
+                }
+
+            }
+
+            else{
+
+                audio.pause();
+
+
+                playButton.classList.remove(
+                    "playing"
+                );
+
+
+                playButton.textContent =
+                    "▶";
+
+
+                buttonLabel.textContent =
+                    "TAP TO PLAY";
+
+            }
+
+        }
+
+        catch(error){
+
+            console.log(
+                "Audio play error:",
+                error
+            );
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   AUDIO ENDED
+===================================================== */
+
+audio.addEventListener(
+    "ended",
+    function(){
+
+        if(
+            currentPlayMode ===
+            "REPEAT"
+        ){
+
+            randomRestartAndPlay();
+
+            return;
+
+        }
+
+
+        userHasStartedAudio =
+            false;
+
+
+        playButton.classList.remove(
+            "playing"
+        );
+
+
+        playButton.textContent =
+            "▶";
+
+
+        buttonLabel.textContent =
+            "TAP TO PLAY";
+
+    }
+);
+
+
+/* =====================================================
+   AUDIO ERROR
+===================================================== */
+
+audio.addEventListener(
+    "error",
+    function(){
+
+        console.log(
+            "Audio element error:",
+            audio.error
+        );
+
+    }
+);
+
+
+/* =====================================================
+   START PLAYER
+===================================================== */
+
+loadConfig();
+
+
+/* =====================================================
+   FAST CONFIG REFRESH
+===================================================== */
+
+setInterval(
+    loadConfig,
+    1000
+);
+
+
+/* =====================================================
+   INITIAL PLAYER STATE
+===================================================== */
+
+buttonLabel.style.display =
+    "none";
 
 
 </script>
