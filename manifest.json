@@ -1,1 +1,25 @@
-
+{
+  "name": "Kulzzy Radio Network",
+  "short_name": "Kulzzy Radio",
+  "description": "Kulzzy Radio Network — Celebrating Lives Everyday",
+  "start_url": "https://kulzzyradio.blogspot.com/?m=1",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#06152B",
+  "theme_color": "#06152B",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
