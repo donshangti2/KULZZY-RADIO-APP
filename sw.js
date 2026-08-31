@@ -10,7 +10,9 @@ const APP_SHELL = [
 ];
 
 
-/* INSTALL NEW VERSION */
+/* =====================================================
+   INSTALL NEW VERSION
+===================================================== */
 
 self.addEventListener("install", event => {
 
@@ -29,7 +31,9 @@ self.addEventListener("install", event => {
 });
 
 
-/* DELETE OLD VERSIONS */
+/* =====================================================
+   ACTIVATE NEW VERSION
+===================================================== */
 
 self.addEventListener("activate", event => {
 
@@ -56,7 +60,27 @@ self.addEventListener("activate", event => {
 });
 
 
-/* ALWAYS CHECK INTERNET FIRST */
+/* =====================================================
+   RECEIVE UPDATE COMMAND
+===================================================== */
+
+self.addEventListener("message", event => {
+
+  if(
+    event.data &&
+    event.data.action === "SKIP_WAITING"
+  ){
+
+    self.skipWaiting();
+
+  }
+
+});
+
+
+/* =====================================================
+   ALWAYS CHECK INTERNET FIRST
+===================================================== */
 
 self.addEventListener("fetch", event => {
 
