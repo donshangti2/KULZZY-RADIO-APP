@@ -6,7 +6,11 @@
 
 <meta name="viewport"
       content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="./manifest.json">
 
+<meta name="theme-color" content="#06152B">
+
+<link rel="apple-touch-icon" href="./icon-192.png">
 <title>Kulzzy Radio Network</title>
 
 <style>
@@ -1842,6 +1846,112 @@ if(db){
     loadNormalSection("home");
 
 }
+
+<script>
+
+/* =====================================================
+   KULZZY RADIO APP INSTALLATION
+===================================================== */
+
+let kulzzyInstallPrompt = null;
+
+
+/* REGISTER SERVICE WORKER */
+
+if("serviceWorker" in navigator){
+
+    window.addEventListener("load", function(){
+
+        navigator.serviceWorker.register("./sw.js")
+        .then(function(){
+
+            console.log(
+                "Kulzzy Radio Service Worker registered"
+            );
+
+        })
+        .catch(function(error){
+
+            console.error(
+                "Service Worker registration failed:",
+                error
+            );
+
+        });
+
+    });
+
+}
+
+
+/* CAPTURE INSTALL PROMPT */
+
+window.addEventListener(
+    "beforeinstallprompt",
+    function(event){
+
+        event.preventDefault();
+
+        kulzzyInstallPrompt = event;
+
+        console.log(
+            "Kulzzy Radio installation is available"
+        );
+
+    }
+);
+
+
+/* INSTALL FUNCTION */
+
+window.kulzzyInstallApp =
+    async function(){
+
+        if(!kulzzyInstallPrompt){
+
+            alert(
+                "If the Install App option is not showing, " +
+                "open Chrome menu ⋮ and select " +
+                "'Install app' or 'Add to Home screen'."
+            );
+
+            return;
+
+        }
+
+
+        kulzzyInstallPrompt.prompt();
+
+
+        const choice =
+            await kulzzyInstallPrompt.userChoice;
+
+
+        console.log(
+            "Installation:",
+            choice.outcome
+        );
+
+
+        kulzzyInstallPrompt = null;
+
+    };
+
+
+/* HIDE PROMPT AFTER INSTALLATION */
+
+window.addEventListener(
+    "appinstalled",
+    function(){
+
+        kulzzyInstallPrompt = null;
+
+        console.log(
+            "Kulzzy Radio installed successfully"
+        );
+
+    }
+);
 
 </script>
 
