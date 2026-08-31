@@ -1,19 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html><html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-<meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-<link rel="manifest" href="./manifest.json">
-
-<meta name="theme-color" content="#06152B">
-
-<link rel="apple-touch-icon" href="./icon-192.png">
-<title>Kulzzy Radio Network</title>
-
-<style>
+<link rel="manifest" href="./manifest.json"><meta name="theme-color" content="#06152B"><link rel="apple-touch-icon"
+      href="./icon-192.png"><title>Kulzzy Radio Network</title><style>
 
 /* =====================================================
    BASIC
@@ -46,7 +36,7 @@ body{
 
     position:fixed !important;
 
-    top:0px;
+    top:0;
     left:50%;
 
     transform:translateX(-50%);
@@ -134,7 +124,6 @@ body{
         70px
         12px
         240px;
-
 }
 
 
@@ -382,7 +371,7 @@ body{
 
 
 /* =====================================================
-   KULZZY RADIO FLOATING PLAYER
+   FLOATING RADIO PLAYER
 ===================================================== */
 
 #kulzzyFloatingRadio{
@@ -404,18 +393,9 @@ body{
     box-shadow:
         0 -5px 25px rgba(0,0,0,.65);
 
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-
     overflow:hidden;
 }
 
-
-/* =====================================================
-   PLAYER + LISTENERS
-===================================================== */
 
 .kulzzyFloatRow{
 
@@ -426,10 +406,6 @@ body{
     align-items:stretch;
 }
 
-
-/* =====================================================
-   PLAYER
-===================================================== */
 
 .kulzzyFloatPlayer{
 
@@ -456,7 +432,7 @@ body{
 
 
 /* =====================================================
-   OUR LISTENERS
+   LISTENERS
 ===================================================== */
 
 .kulzzyFloatListeners{
@@ -527,10 +503,6 @@ body{
     margin-top:12px;
 }
 
-
-/* =====================================================
-   BLINK
-===================================================== */
 
 @keyframes kulzzyFloatBlink{
 
@@ -631,10 +603,6 @@ body{
 }
 
 
-/* =====================================================
-   SMALL PHONES
-===================================================== */
-
 @media(max-width:380px){
 
     .kulzzyFloatPlayer{
@@ -661,216 +629,164 @@ body{
     }
 }
 
-</style>
-
-</head>
-
-
-<body>
-
-
-<!-- =====================================================
+</style></head><body><!-- =====================================================
      FLOATING NAVIGATION
-===================================================== -->
+===================================================== --><nav id="kulzzyNav"><button
+    type="button"
+    class="kulzzyNavBtn active"
+    data-section="home">
 
-<nav id="kulzzyNav">
+    Home
 
-    <button
-        type="button"
-        class="kulzzyNavBtn active"
-        data-section="home">
-
-        Home
-
-    </button>
+</button>
 
 
-    <button
-        type="button"
-        class="kulzzyNavBtn"
-        data-section="request">
+<button
+    type="button"
+    class="kulzzyNavBtn"
+    data-section="request">
 
-        Request
+    Request
 
-    </button>
-
-
-    <button
-        type="button"
-        class="kulzzyNavBtn"
-        data-section="wishes">
-
-        Wishes
-
-    </button>
+</button>
 
 
-    <button
-        type="button"
-        class="kulzzyNavBtn"
-        data-section="market">
+<button
+    type="button"
+    class="kulzzyNavBtn"
+    data-section="wishes">
 
-        Market
+    Wishes
 
-    </button>
-
-
-    <button
-        type="button"
-        class="kulzzyNavBtn"
-        data-section="more">
-
-        More
-
-    </button>
-
-</nav>
+</button>
 
 
+<button
+    type="button"
+    class="kulzzyNavBtn"
+    data-section="market">
 
-<!-- =====================================================
+    Market
+
+</button>
+
+
+<button
+    type="button"
+    class="kulzzyNavBtn"
+    data-section="more">
+
+    More
+
+</button>
+
+</nav><!-- =====================================================
      MAIN CONTENT
-===================================================== -->
+===================================================== --><div id="kulzzyContent"><section
+    id="kulzzy-home"
+    class="kulzzySection active">
 
-<div id="kulzzyContent">
+    <div
+        id="kulzzyPublished-home"
+        class="kulzzyPublishedContent">
+    </div>
 
-
-    <!-- HOME -->
-
-    <section
-        id="kulzzy-home"
-        class="kulzzySection active">
-
-        <div
-            id="kulzzyPublished-home"
-            class="kulzzyPublishedContent">
-        </div>
-
-    </section>
+</section>
 
 
+<section
+    id="kulzzy-request"
+    class="kulzzySection">
 
-    <!-- REQUEST -->
+    <div
+        id="kulzzyPublished-request"
+        class="kulzzyPublishedContent">
+    </div>
 
-    <section
-        id="kulzzy-request"
-        class="kulzzySection">
-
-        <div
-            id="kulzzyPublished-request"
-            class="kulzzyPublishedContent">
-        </div>
-
-    </section>
+</section>
 
 
+<section
+    id="kulzzy-wishes"
+    class="kulzzySection">
 
-    <!-- WISHES -->
+    <div
+        id="kulzzyPublished-wishes"
+        class="kulzzyPublishedContent">
+    </div>
 
-    <section
-        id="kulzzy-wishes"
-        class="kulzzySection">
-
-        <div
-            id="kulzzyPublished-wishes"
-            class="kulzzyPublishedContent">
-        </div>
-
-    </section>
+</section>
 
 
+<section
+    id="kulzzy-market"
+    class="kulzzySection">
 
-    <!-- MARKET -->
+    <div
+        id="kulzzyPublished-market"
+        class="kulzzyPublishedContent">
+    </div>
 
-    <section
-        id="kulzzy-market"
-        class="kulzzySection">
-
-        <div
-            id="kulzzyPublished-market"
-            class="kulzzyPublishedContent">
-        </div>
-
-    </section>
+</section>
 
 
+<section
+    id="kulzzy-more"
+    class="kulzzySection">
 
-    <!-- MORE -->
-
-    <section
-        id="kulzzy-more"
-        class="kulzzySection">
-
-        <div
-            id="kulzzyMorePagesMenu">
-        </div>
+    <div
+        id="kulzzyMorePagesMenu">
+    </div>
 
 
-        <div
-            id="kulzzyMorePageContent">
-        </div>
+    <div
+        id="kulzzyMorePageContent">
+    </div>
 
-    </section>
+</section>
 
-</div>
-
-
-
-<!-- =====================================================
-     KULZZY FLOATING RADIO PLAYER
-===================================================== -->
-
-<div id="kulzzyFloatingRadio">
-
-    <div class="kulzzyFloatRow">
+</div><!-- =====================================================
+     FLOATING RADIO PLAYER
+===================================================== --><div id="kulzzyFloatingRadio"><div class="kulzzyFloatRow">
 
 
-        <!-- RADIO PLAYER -->
+    <div class="kulzzyFloatPlayer">
 
-        <div class="kulzzyFloatPlayer">
+        <iframe
 
-            <iframe
+            src="https://kulzzy.github.io/KULZZY-AUTO-PLAYER/"
 
-                src="https://kulzzy.github.io/KULZZY-AUTO-PLAYER/"
+            title="Kulzzy Radio Network"
 
-                title="Kulzzy Radio Network"
+            allow="autoplay"
 
-                allow="autoplay"
+            scrolling="no">
 
-                scrolling="no">
+        </iframe>
 
-            </iframe>
-
-        </div>
+    </div>
 
 
+    <div class="kulzzyFloatListeners">
 
-        <!-- =================================================
-             OUR LISTENERS
-        ================================================= -->
+        <div>
 
-        <div class="kulzzyFloatListeners">
+            <div class="kulzzyFloatListenerTitle">
 
-            <div>
+                <span
+                    class="kulzzyFloatDot">
+                </span>
 
-                <div class="kulzzyFloatListenerTitle">
+                OUR LISTENERS
 
-                    <span
-                        class="kulzzyFloatDot">
-                    </span>
-
-                    OUR LISTENERS
-
-                </div>
+            </div>
 
 
-                <div
-                    id="kulzzyFloatingListenerNumber"
-                    class="kulzzyFloatNumber">
+            <div
+                id="kulzzyFloatingListenerNumber"
+                class="kulzzyFloatNumber">
 
-                    0
-
-                </div>
+                0
 
             </div>
 
@@ -880,13 +796,9 @@ body{
 
 </div>
 
-
-
-<!-- =====================================================
+</div><!-- =====================================================
      LISTENER COUNTER
-===================================================== -->
-
-<script>
+===================================================== --><script>
 
 (function(){
 
@@ -962,15 +874,9 @@ body{
 
 })();
 
-</script>
-
-
-
-<!-- =====================================================
+</script><!-- =====================================================
      FIREBASE
-===================================================== -->
-
-<script type="module">
+===================================================== --><script type="module">
 
 import {
 
@@ -1027,9 +933,9 @@ const firebaseConfig = {
 };
 
 
-let app;
+let app = null;
 
-let db;
+let db = null;
 
 
 try{
@@ -1071,10 +977,6 @@ const normalSections = [
 ];
 
 
-/* =====================================================
-   CACHE
-===================================================== */
-
 const loadedSections =
     Object.create(null);
 
@@ -1084,7 +986,7 @@ const loadingSections =
 
 
 /* =====================================================
-   MORE CACHE
+   MORE
 ===================================================== */
 
 let morePagesLoaded = false;
@@ -1276,7 +1178,10 @@ function executePublishedScripts(container){
    DISPLAY NORMAL CONTENT
 ===================================================== */
 
-function displayNormalContent(section,html){
+function displayNormalContent(
+    section,
+    html
+){
 
     const container =
         document.getElementById(
@@ -1332,7 +1237,7 @@ function displayNormalContent(section,html){
 
 
 /* =====================================================
-   FAST NORMAL SECTION LOADER
+   LOAD NORMAL SECTION
 ===================================================== */
 
 async function loadNormalSection(section){
@@ -1365,6 +1270,10 @@ async function loadNormalSection(section){
 
 
     if(!db){
+
+        console.error(
+            "Firebase database is not available."
+        );
 
         return;
 
@@ -1443,29 +1352,10 @@ async function loadNormalSection(section){
 
 
 /* =====================================================
-   MORE PAGES
+   MORE PAGES LOADER
 ===================================================== */
 
 async function loadMorePages(){
-
-    const menu =
-        document.getElementById(
-            "kulzzyMorePagesMenu"
-        );
-
-
-    const content =
-        document.getElementById(
-            "kulzzyMorePageContent"
-        );
-
-
-    if(!menu || !content){
-
-        return;
-
-    }
-
 
     if(morePagesLoaded){
 
@@ -1503,9 +1393,24 @@ async function loadMorePages(){
                     );
 
 
-                if(
-                    !snapshot.exists()
-                ){
+                const menu =
+                    document.getElementById(
+                        "kulzzyMorePagesMenu"
+                    );
+
+
+                if(!menu){
+
+                    return;
+
+                }
+
+
+                menu.innerHTML =
+                    "";
+
+
+                if(!snapshot.exists()){
 
                     morePagesLoaded = true;
 
@@ -1518,24 +1423,24 @@ async function loadMorePages(){
                     snapshot.val();
 
 
-                morePagesData =
+                morePagesData = [];
 
-                    Object.keys(data)
 
-                    .map(function(id){
+                Object.keys(data || {})
+                    .forEach(function(id){
 
                         const page =
                             data[id] || {};
 
 
-                        return{
+                        morePagesData.push({
 
                             id:id,
 
                             title:
                                 page.title ||
                                 page.name ||
-                                "Untitled Page",
+                                "Page",
 
                             html:
                                 getPageHTML(page),
@@ -1545,23 +1450,22 @@ async function loadMorePages(){
                                 ? page.order
                                 : 0
 
-                        };
-
-                    })
-
-                    .sort(function(a,b){
-
-                        return a.order - b.order;
+                        });
 
                     });
 
 
-                const fragment =
-                    document.createDocumentFragment();
+                morePagesData.sort(
+                    function(a,b){
+
+                        return a.order - b.order;
+
+                    }
+                );
 
 
                 morePagesData.forEach(
-                    function(page){
+                    function(page,index){
 
                         const button =
                             document.createElement(
@@ -1585,25 +1489,81 @@ async function loadMorePages(){
                             "click",
                             function(){
 
-                                showMorePage(
-                                    page,
-                                    button
+                                document
+                                    .querySelectorAll(
+                                        ".kulzzyMorePageButton"
+                                    )
+                                    .forEach(
+                                        function(btn){
+
+                                            btn.classList.remove(
+                                                "active"
+                                            );
+
+                                        }
+                                    );
+
+
+                                button.classList.add(
+                                    "active"
+                                );
+
+
+                                const content =
+                                    document.getElementById(
+                                        "kulzzyMorePageContent"
+                                    );
+
+
+                                if(!content){
+
+                                    return;
+
+                                }
+
+
+                                content.innerHTML = "";
+
+
+                                const box =
+                                    document.createElement(
+                                        "div"
+                                    );
+
+
+                                box.className =
+                                    "kulzzyMorePageContentBox";
+
+
+                                box.innerHTML =
+                                    page.html || "";
+
+
+                                content.appendChild(
+                                    box
+                                );
+
+
+                                executePublishedScripts(
+                                    box
                                 );
 
                             }
                         );
 
 
-                        fragment.appendChild(
+                        menu.appendChild(
                             button
                         );
 
+
+                        if(index === 0){
+
+                            button.click();
+
+                        }
+
                     }
-                );
-
-
-                menu.appendChild(
-                    fragment
                 );
 
 
@@ -1614,130 +1574,49 @@ async function loadMorePages(){
             catch(error){
 
                 console.error(
-                    "Firebase More pages error:",
+                    "More pages error:",
                     error
                 );
-
-            }
-
-            finally{
-
-                morePagesLoading = false;
 
             }
 
         })();
 
 
-    return morePagesLoading;
+    try{
+
+        await morePagesLoading;
+
+    }
+
+    finally{
+
+        morePagesLoading = false;
+
+    }
 
 }
 
 
 /* =====================================================
-   SHOW MORE PAGE
+   NAVIGATION
 ===================================================== */
 
-function showMorePage(page,button){
-
-    const content =
-        document.getElementById(
-            "kulzzyMorePageContent"
-        );
-
-
-    if(!content){
-
-        return;
-
-    }
-
-
-    document
-        .querySelectorAll(
-            ".kulzzyMorePageButton"
-        )
-        .forEach(function(item){
-
-            item.classList.remove(
-                "active"
-            );
-
-        });
-
-
-    if(button){
-
-        button.classList.add(
-            "active"
-        );
-
-    }
-
-
-    const html =
-        getPageHTML(page);
-
-
-    if(
-        !html ||
-        !html.trim()
-    ){
-
-        content.innerHTML = "";
-
-        return;
-
-    }
-
-
-    const pageBox =
-        document.createElement(
-            "div"
-        );
-
-
-    pageBox.className =
-        "kulzzyMorePageContentBox";
-
-
-    pageBox.innerHTML =
-        html;
-
-
-    content.innerHTML =
-        "";
-
-
-    content.appendChild(
-        pageBox
-    );
-
-
-    executePublishedScripts(
-        pageBox
-    );
-
-}
-
-
-/* =====================================================
-   OPEN SECTION
-===================================================== */
-
-function openSection(section,button){
+function openSection(section){
 
     document
         .querySelectorAll(
             ".kulzzySection"
         )
-        .forEach(function(item){
+        .forEach(
+            function(item){
 
-            item.classList.remove(
-                "active"
-            );
+                item.classList.remove(
+                    "active"
+                );
 
-        });
+            }
+        );
 
 
     const target =
@@ -1759,22 +1638,27 @@ function openSection(section,button){
         .querySelectorAll(
             ".kulzzyNavBtn"
         )
-        .forEach(function(item){
+        .forEach(
+            function(button){
 
-            item.classList.remove(
-                "active"
-            );
-
-        });
+                button.classList.remove(
+                    "active"
+                );
 
 
-    if(button){
+                if(
+                    button.dataset.section ===
+                    section
+                ){
 
-        button.classList.add(
-            "active"
+                    button.classList.add(
+                        "active"
+                    );
+
+                }
+
+            }
         );
-
-    }
 
 
     if(
@@ -1794,153 +1678,159 @@ function openSection(section,button){
 
     }
 
+
+    window.scrollTo(
+        0,
+        0
+    );
+
 }
 
 
 /* =====================================================
-   PUBLIC NAVIGATION
-===================================================== */
-
-window.kulzzyOpen =
-    function(section,button){
-
-        openSection(
-            section,
-            button
-        );
-
-    };
-
-
-/* =====================================================
-   NAVIGATION EVENTS
+   NAVIGATION BUTTONS
 ===================================================== */
 
 document
     .querySelectorAll(
         ".kulzzyNavBtn"
     )
-    .forEach(function(button){
+    .forEach(
+        function(button){
 
-        button.addEventListener(
-            "click",
-            function(){
-
-                openSection(
-                    button.dataset.section,
-                    button
-                );
-
-            }
-        );
-
-    });
-
-
-/* =====================================================
-   LOAD HOME IMMEDIATELY
-===================================================== */
-
-if(db){
-
-    loadNormalSection("home");
-
-}
-
-<script>
-
-/* =====================================================
-   KULZZY RADIO APP INSTALLATION
-===================================================== */
-
-let kulzzyInstallPrompt = null;
-
-
-/* =====================================================
-   REGISTER SERVICE WORKER + AUTO UPDATE
-===================================================== */
-
-if("serviceWorker" in navigator){
-
-    window.addEventListener("load", async function(){
-
-        try{
-
-            const registration =
-                await navigator.serviceWorker.register("./sw.js");
-
-
-            console.log(
-                "Kulzzy Radio Service Worker registered"
-            );
-
-
-            /* CHECK FOR NEW VERSION NOW */
-
-            registration.update();
-
-
-            /* CHECK FOR NEW VERSION EVERY 60 SECONDS */
-
-            setInterval(function(){
-
-                registration.update();
-
-            }, 60000);
-
-
-            /* NEW VERSION FOUND */
-
-            registration.addEventListener(
-                "updatefound",
+            button.addEventListener(
+                "click",
                 function(){
 
-                    const newWorker =
-                        registration.installing;
-
-
-                    if(!newWorker) return;
-
-
-                    newWorker.addEventListener(
-                        "statechange",
-                        function(){
-
-                            if(
-                                newWorker.state === "installed" &&
-                                navigator.serviceWorker.controller
-                            ){
-
-                                newWorker.postMessage({
-
-                                    action:
-                                        "SKIP_WAITING"
-
-                                });
-
-                            }
-
-                        }
+                    openSection(
+                        button.dataset.section
                     );
 
                 }
             );
 
+        }
+    );
 
-        }catch(error){
 
-            console.error(
-                "Kulzzy Radio Service Worker error:",
-                error
-            );
+/* =====================================================
+   LOAD HOME FIRST
+===================================================== */
+
+loadNormalSection(
+    "home"
+);
+
+</script><!-- =====================================================
+     PWA INSTALLATION + AUTOMATIC UPDATES
+===================================================== --><script>
+
+let kulzzyInstallPrompt = null;
+
+
+/* =====================================================
+   REGISTER SERVICE WORKER
+===================================================== */
+
+if(
+    "serviceWorker" in navigator
+){
+
+    window.addEventListener(
+        "load",
+        async function(){
+
+            try{
+
+                const registration =
+                    await navigator.serviceWorker.register(
+                        "./sw.js"
+                    );
+
+
+                console.log(
+                    "Kulzzy Radio Service Worker registered"
+                );
+
+
+                /* CHECK FOR NEW VERSION */
+
+                registration.update();
+
+
+                /* CHECK EVERY 60 SECONDS */
+
+                setInterval(
+                    function(){
+
+                        registration.update();
+
+                    },
+                    60000
+                );
+
+
+                /* =================================================
+                   NEW VERSION FOUND
+                ================================================= */
+
+                registration.addEventListener(
+                    "updatefound",
+                    function(){
+
+                        const newWorker =
+                            registration.installing;
+
+
+                        if(!newWorker){
+
+                            return;
+
+                        }
+
+
+                        newWorker.addEventListener(
+                            "statechange",
+                            function(){
+
+                                if(
+                                    newWorker.state ===
+                                    "installed" &&
+                                    navigator.serviceWorker.controller
+                                ){
+
+                                    newWorker.postMessage({
+
+                                        action:
+                                            "SKIP_WAITING"
+
+                                    });
+
+                                }
+
+                            }
+                        );
+
+                    }
+                );
+
+            }
+
+            catch(error){
+
+                console.error(
+                    "Service Worker registration failed:",
+                    error
+                );
+
+            }
 
         }
-
-    });
+    );
 
 
     /* =================================================
-       REFRESH APP WHEN NEW VERSION IS ACTIVE
+       AUTOMATIC REFRESH
     ================================================= */
 
     let kulzzyRefreshing = false;
@@ -1950,7 +1840,11 @@ if("serviceWorker" in navigator){
         "controllerchange",
         function(){
 
-            if(kulzzyRefreshing) return;
+            if(kulzzyRefreshing){
+
+                return;
+
+            }
 
 
             kulzzyRefreshing = true;
@@ -1961,9 +1855,12 @@ if("serviceWorker" in navigator){
         }
     );
 
-      }
+}
 
-/* CAPTURE INSTALL PROMPT */
+
+/* =====================================================
+   INSTALL PROMPT
+===================================================== */
 
 window.addEventListener(
     "beforeinstallprompt",
@@ -1971,7 +1868,9 @@ window.addEventListener(
 
         event.preventDefault();
 
-        kulzzyInstallPrompt = event;
+        kulzzyInstallPrompt =
+            event;
+
 
         console.log(
             "Kulzzy Radio installation is available"
@@ -1981,7 +1880,9 @@ window.addEventListener(
 );
 
 
-/* INSTALL FUNCTION */
+/* =====================================================
+   INSTALL FUNCTION
+===================================================== */
 
 window.kulzzyInstallApp =
     async function(){
@@ -2012,18 +1913,23 @@ window.kulzzyInstallApp =
         );
 
 
-        kulzzyInstallPrompt = null;
+        kulzzyInstallPrompt =
+            null;
 
     };
 
 
-/* HIDE PROMPT AFTER INSTALLATION */
+/* =====================================================
+   AFTER INSTALLATION
+===================================================== */
 
 window.addEventListener(
     "appinstalled",
     function(){
 
-        kulzzyInstallPrompt = null;
+        kulzzyInstallPrompt =
+            null;
+
 
         console.log(
             "Kulzzy Radio installed successfully"
@@ -2034,5 +1940,7 @@ window.addEventListener(
 
 </script>
 
+
 </body>
+
 </html>
