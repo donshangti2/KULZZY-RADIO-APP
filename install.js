@@ -7,8 +7,16 @@
 
     "use strict";
 
+
     /* =====================================================
-       PREVENT INSTALL SCREEN IF ALREADY INSTALLED
+       INSTALL PROMPT
+    ===================================================== */
+
+    var deferredInstallPrompt = null;
+
+
+    /* =====================================================
+       CHECK IF APP IS ALREADY INSTALLED
     ===================================================== */
 
     function isInstalled() {
@@ -20,13 +28,16 @@
             return true;
         }
 
+
         if (
             window.navigator.standalone === true
         ) {
             return true;
         }
 
+
         return false;
+
     }
 
 
@@ -44,7 +55,7 @@
 
 
     /* =====================================================
-       IPHONE / IPAD SAFARI DETECTION
+       IOS SAFARI DETECTION
     ===================================================== */
 
     function isIOSSafari() {
@@ -80,6 +91,39 @@
         );
 
     }
+
+
+    /* =====================================================
+       CAPTURE REAL BROWSER INSTALL PROMPT
+    ===================================================== */
+
+    window.addEventListener(
+        "beforeinstallprompt",
+        function (event) {
+
+            event.preventDefault();
+
+            deferredInstallPrompt = event;
+
+
+            var button =
+                document.getElementById(
+                    "kulzzyInstallButton"
+                );
+
+
+            if (button) {
+
+                button.innerHTML =
+                    "📲 INSTALL APP";
+
+                button.style.display =
+                    "block";
+
+            }
+
+        }
+    );
 
 
     /* =====================================================
@@ -194,7 +238,7 @@
         setupContinueButton();
 
 
-        showCorrectInstructions();
+        updateInstallScreen();
 
     }
 
@@ -528,44 +572,6 @@
 
 
     /* =====================================================
-       INSTALL PROMPT VARIABLE
-    ===================================================== */
-
-    var deferredInstallPrompt = null;
-
-
-    /* =====================================================
-       CAPTURE BROWSER INSTALL PROMPT
-    ===================================================== */
-
-    window.addEventListener(
-        "beforeinstallprompt",
-        function (event) {
-
-            event.preventDefault();
-
-            deferredInstallPrompt =
-                event;
-
-
-            var button =
-                document.getElementById(
-                    "kulzzyInstallButton"
-                );
-
-
-            if (button) {
-
-                button.style.display =
-                    "block";
-
-            }
-
-        }
-    );
-
-
-    /* =====================================================
        INSTALL BUTTON
     ===================================================== */
 
@@ -586,9 +592,10 @@
             "click",
             async function () {
 
+
                 /* =========================================
-                   ANDROID / CHROME / EDGE / SUPPORTED
-                   ========================================= */
+                   REAL PWA INSTALL
+                ========================================= */
 
                 if (deferredInstallPrompt) {
 
@@ -630,7 +637,7 @@
 
                 /* =========================================
                    IPHONE / IPAD
-                   ========================================= */
+                ========================================= */
 
                 if (isIOSSafari()) {
 
@@ -642,8 +649,8 @@
 
 
                 /* =========================================
-                   OTHER COMPUTERS / BROWSERS
-                   ========================================= */
+                   ANDROID / OTHER BROWSERS
+                ========================================= */
 
                 showManualInstructions();
 
@@ -699,7 +706,8 @@
         }
 
 
-        screen.style.opacity = "0";
+        screen.style.opacity =
+            "0";
 
 
         screen.style.transition =
@@ -723,7 +731,7 @@
 
 
     /* =====================================================
-       IPHONE / IPAD INSTRUCTIONS
+       IOS INSTALL INSTRUCTIONS
     ===================================================== */
 
     function showIOSInstructions() {
@@ -793,7 +801,7 @@
 
 
     /* =====================================================
-       GENERAL MANUAL INSTRUCTIONS
+       MANUAL INSTALL INSTRUCTIONS
     ===================================================== */
 
     function showManualInstructions() {
@@ -862,7 +870,67 @@
 
 
     /* =====================================================
-       APP INSTALLED EVENT
+       UPDATE INSTALL SCREEN
+    ===================================================== */
+
+    function updateInstallScreen() {
+
+        var button =
+            document.getElementById(
+                "kulzzyInstallButton"
+            );
+
+
+        if (!button) {
+            return;
+        }
+
+
+        /*
+         * REAL INSTALL PROMPT AVAILABLE
+         */
+
+        if (deferredInstallPrompt) {
+
+            button.innerHTML =
+                "📲 INSTALL APP";
+
+            button.style.display =
+                "block";
+
+            return;
+
+        }
+
+
+        /*
+         * IOS
+         */
+
+        if (isIOSSafari()) {
+
+            button.style.display =
+                "block";
+
+            return;
+
+        }
+
+
+        /*
+         * KEEP BUTTON AVAILABLE
+         * FOR BROWSERS THAT PROVIDE
+         * THEIR OWN INSTALL OPTION
+         */
+
+        button.style.display =
+            "block";
+
+    }
+
+
+    /* =====================================================
+       APP INSTALLED
     ===================================================== */
 
     window.addEventListener(
@@ -879,66 +947,10 @@
 
 
     /* =====================================================
-       SHOW CORRECT INFORMATION
+       WHEN PAGE IS READY
     ===================================================== */
 
-    function showCorrectInstructions() {
-
-        var button =
-            document.getElementById(
-                "kulzzyInstallButton"
-            );
-
-
-        if (!button) {
-            return;
-        }
-
-
-        /*
-         * If browser supports the real
-         * installation prompt, keep the
-         * INSTALL APP button.
-         */
-
-        if (deferredInstallPrompt) {
-
-            button.style.display =
-                "block";
-
-            return;
-
-        }
-
-
-        /*
-         * iPhone / iPad
-         */
-
-        if (isIOSSafari()) {
-
-            button.style.display =
-                "block";
-
-            return;
-
-        }
-
-
-        /*
-         * Other browsers.
-         */
-
-        button.style.display =
-            "block";
-
-    }
-
-
-    /* =====================================================
-       WAIT UNTIL PAGE IS READY
-    ===================================================== */
-function startInstallSystem() {
+    function startInstallSystem() {
 
         if (isInstalled()) {
             return;
@@ -946,6 +958,21 @@ function startInstallSystem() {
 
 
         createInstallScreen();
+
+
+        /*
+         * Give the browser time to
+         * provide beforeinstallprompt.
+         */
+
+        setTimeout(
+            function () {
+
+                updateInstallScreen();
+
+            },
+            1000
+        );
 
     }
 
@@ -967,5 +994,6 @@ function startInstallSystem() {
         startInstallSystem();
 
     }
+
 
 })();
