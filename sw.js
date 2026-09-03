@@ -1,10 +1,10 @@
 /* =========================================================
    KULZZY RADIO NETWORK
-   SERVICE WORKER
-   FAST + RELIABLE APP LOADING
-========================================================= */
+   UNIVERSAL SERVICE WORKER
+   FAST + RELIABLE LOADING
+   ========================================================= */
 
-const CACHE_NAME = "kulzzy-radio-app-v3";
+const CACHE_NAME = "kulzzy-radio-app-v5";
 
 const APP_SHELL = [
     "./",
@@ -20,19 +20,19 @@ const APP_SHELL = [
    INSTALL
 ========================================================= */
 
-self.addEventListener("install", event => {
+self.addEventListener("install", function(event) {
 
     event.waitUntil(
 
         caches.open(CACHE_NAME)
 
-            .then(cache => {
+            .then(function(cache) {
 
                 return cache.addAll(APP_SHELL);
 
             })
 
-            .then(() => {
+            .then(function() {
 
                 return self.skipWaiting();
 
@@ -47,25 +47,25 @@ self.addEventListener("install", event => {
    ACTIVATE
 ========================================================= */
 
-self.addEventListener("activate", event => {
+self.addEventListener("activate", function(event) {
 
     event.waitUntil(
 
         caches.keys()
 
-            .then(cacheNames => {
+            .then(function(cacheNames) {
 
                 return Promise.all(
 
                     cacheNames
 
-                        .filter(name => {
+                        .filter(function(name) {
 
                             return name !== CACHE_NAME;
 
                         })
 
-                        .map(name => {
+                        .map(function(name) {
 
                             return caches.delete(name);
 
@@ -75,7 +75,7 @@ self.addEventListener("activate", event => {
 
             })
 
-            .then(() => {
+            .then(function() {
 
                 return self.clients.claim();
 
@@ -90,31 +90,22 @@ self.addEventListener("activate", event => {
    FETCH
 ========================================================= */
 
-self.addEventListener("fetch", event => {
+self.addEventListener("fetch", function(event) {
 
     const request = event.request;
 
-
-    /* -----------------------------------------------------
-       ONLY GET REQUESTS
-    ----------------------------------------------------- */
-
     if (request.method !== "GET") {
-
         return;
-
     }
-
 
     const url = new URL(request.url);
 
 
-    /* -----------------------------------------------------
-       EXTERNAL SERVICES
-       
+    /* =====================================================
+       EXTERNAL REQUESTS
        Firebase, radio player, APIs, etc.
-       are NOT cached by this service worker.
-    ----------------------------------------------------- */
+       NEVER CACHE THESE.
+    ===================================================== */
 
     if (url.origin !== self.location.origin) {
 
@@ -122,7 +113,7 @@ self.addEventListener("fetch", event => {
 
             fetch(request)
 
-                .catch(() => {
+                .catch(function() {
 
                     return caches.match(request);
 
@@ -131,17 +122,18 @@ self.addEventListener("fetch", event => {
         );
 
         return;
-
     }
 
 
     /* =====================================================
-       NAVIGATION / HTML
-       
+       HTML / PAGE NAVIGATION
+
        NETWORK FIRST
-       
-       This prevents an old cached index.html from keeping
-       the app stuck on an older version.
+       CACHE FALLBACK
+
+       This makes sure users get the latest app when
+       internet is available, while still allowing the
+       app to open when the connection is poor.
     ===================================================== */
 
     if (
@@ -153,65 +145,60 @@ self.addEventListener("fetch", event => {
 
             fetch(request)
 
-                .then(networkResponse => {
+                .then(function(response) {
 
                     if (
-                        networkResponse &&
-                        networkResponse.ok
+                        response &&
+                        response.ok
                     ) {
 
-                        const responseClone =
-                            networkResponse.clone();
+                        const copy =
+                            response.clone();
 
                         caches.open(CACHE_NAME)
 
-                            .then(cache => {
+                            .then(function(cache) {
 
                                 cache.put(
                                     request,
-                                    responseClone
+                                    copy
                                 );
 
                             });
 
                     }
 
-                    return networkResponse;
+                    return response;
 
                 })
 
-                .catch(() => {
+                .catch(function() {
 
-                    return caches.match(
-                        request
-                    )
+                    return caches.match(request)
 
-                    .then(cachedPage => {
+                        .then(function(cached) {
 
-                        if (cachedPage) {
+                            if (cached) {
+                                return cached;
+                            }
 
-                            return cachedPage;
+                            return caches.match(
+                                "./index.html"
+                            );
 
-                        }
-
-                        return caches.match(
-                            "./index.html"
-                        );
-
-                    });
+                        });
 
                 })
 
         );
 
         return;
-
     }
 
 
     /* =====================================================
-       OTHER SAME-ORIGIN FILES
-       
+       SAME-ORIGIN FILES
+
        CACHE FIRST
        NETWORK FALLBACK
     ===================================================== */
@@ -220,45 +207,42 @@ self.addEventListener("fetch", event => {
 
         caches.match(request)
 
-            .then(cachedResponse => {
+            .then(function(cached) {
 
-                if (cachedResponse) {
-
-                    return cachedResponse;
-
+                if (cached) {
+                    return cached;
                 }
-
 
                 return fetch(request)
 
-                    .then(networkResponse => {
+                    .then(function(response) {
 
                         if (
-                            networkResponse &&
-                            networkResponse.ok
+                            response &&
+                            response.ok
                         ) {
 
-                            const responseClone =
-                                networkResponse.clone();
+                            const copy =
+                                response.clone();
 
                             caches.open(CACHE_NAME)
 
-                                .then(cache => {
+                                .then(function(cache) {
 
                                     cache.put(
                                         request,
-                                        responseClone
+                                        copy
                                     );
 
                                 });
 
                         }
 
-                        return networkResponse;
+                        return response;
 
                     })
 
-                    .catch(() => {
+                    .catch(function() {
 
                         return caches.match(
                             "./index.html"
