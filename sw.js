@@ -1,10 +1,10 @@
 /* =========================================================
    KULZZY RADIO NETWORK
-   UNIVERSAL SERVICE WORKER
-   FAST + RELIABLE LOADING
-   ========================================================= */
+   SERVICE WORKER
+   FAST + RELIABLE APP LOADING
+========================================================= */
 
-const CACHE_NAME = "kulzzy-radio-app-v5";
+const CACHE_NAME = "kulzzy-radio-app-v6";
 
 const APP_SHELL = [
     "./",
@@ -12,7 +12,8 @@ const APP_SHELL = [
     "./manifest.json",
     "./install.js",
     "./icon-192.png",
-    "./icon-512.png"
+    "./icon-512.png",
+    "./apple-touch-icon.png"
 ];
 
 
@@ -20,19 +21,19 @@ const APP_SHELL = [
    INSTALL
 ========================================================= */
 
-self.addEventListener("install", function(event) {
+self.addEventListener("install", event => {
 
     event.waitUntil(
 
         caches.open(CACHE_NAME)
 
-            .then(function(cache) {
+            .then(cache => {
 
                 return cache.addAll(APP_SHELL);
 
             })
 
-            .then(function() {
+            .then(() => {
 
                 return self.skipWaiting();
 
@@ -47,25 +48,25 @@ self.addEventListener("install", function(event) {
    ACTIVATE
 ========================================================= */
 
-self.addEventListener("activate", function(event) {
+self.addEventListener("activate", event => {
 
     event.waitUntil(
 
         caches.keys()
 
-            .then(function(cacheNames) {
+            .then(cacheNames => {
 
                 return Promise.all(
 
                     cacheNames
 
-                        .filter(function(name) {
+                        .filter(name => {
 
                             return name !== CACHE_NAME;
 
                         })
 
-                        .map(function(name) {
+                        .map(name => {
 
                             return caches.delete(name);
 
@@ -75,7 +76,7 @@ self.addEventListener("activate", function(event) {
 
             })
 
-            .then(function() {
+            .then(() => {
 
                 return self.clients.claim();
 
@@ -87,25 +88,44 @@ self.addEventListener("activate", function(event) {
 
 
 /* =========================================================
+   MESSAGE
+========================================================= */
+
+self.addEventListener("message", event => {
+
+    if (
+        event.data &&
+        event.data.action === "SKIP_WAITING"
+    ) {
+
+        self.skipWaiting();
+
+    }
+
+});
+
+
+/* =========================================================
    FETCH
 ========================================================= */
 
-self.addEventListener("fetch", function(event) {
+self.addEventListener("fetch", event => {
 
     const request = event.request;
 
     if (request.method !== "GET") {
+
         return;
+
     }
+
 
     const url = new URL(request.url);
 
 
-    /* =====================================================
+    /* -----------------------------------------------------
        EXTERNAL REQUESTS
-       Firebase, radio player, APIs, etc.
-       NEVER CACHE THESE.
-    ===================================================== */
+    ----------------------------------------------------- */
 
     if (url.origin !== self.location.origin) {
 
@@ -113,7 +133,7 @@ self.addEventListener("fetch", function(event) {
 
             fetch(request)
 
-                .catch(function() {
+                .catch(() => {
 
                     return caches.match(request);
 
@@ -122,19 +142,14 @@ self.addEventListener("fetch", function(event) {
         );
 
         return;
+
     }
 
 
-    /* =====================================================
+    /* -----------------------------------------------------
        HTML / PAGE NAVIGATION
-
        NETWORK FIRST
-       CACHE FALLBACK
-
-       This makes sure users get the latest app when
-       internet is available, while still allowing the
-       app to open when the connection is poor.
-    ===================================================== */
+    ----------------------------------------------------- */
 
     if (
         request.mode === "navigate" ||
@@ -145,7 +160,7 @@ self.addEventListener("fetch", function(event) {
 
             fetch(request)
 
-                .then(function(response) {
+                .then(response => {
 
                     if (
                         response &&
@@ -157,7 +172,7 @@ self.addEventListener("fetch", function(event) {
 
                         caches.open(CACHE_NAME)
 
-                            .then(function(cache) {
+                            .then(cache => {
 
                                 cache.put(
                                     request,
@@ -172,14 +187,16 @@ self.addEventListener("fetch", function(event) {
 
                 })
 
-                .catch(function() {
+                .catch(() => {
 
                     return caches.match(request)
 
-                        .then(function(cached) {
+                        .then(cachedPage => {
 
-                            if (cached) {
-                                return cached;
+                            if (cachedPage) {
+
+                                return cachedPage;
+
                             }
 
                             return caches.match(
@@ -193,29 +210,31 @@ self.addEventListener("fetch", function(event) {
         );
 
         return;
+
     }
 
 
-    /* =====================================================
-       SAME-ORIGIN FILES
-
+    /* -----------------------------------------------------
+       OTHER SAME-ORIGIN FILES
        CACHE FIRST
-       NETWORK FALLBACK
-    ===================================================== */
+    ----------------------------------------------------- */
 
     event.respondWith(
 
         caches.match(request)
 
-            .then(function(cached) {
+            .then(cachedResponse => {
 
-                if (cached) {
-                    return cached;
+                if (cachedResponse) {
+
+                    return cachedResponse;
+
                 }
+
 
                 return fetch(request)
 
-                    .then(function(response) {
+                    .then(response => {
 
                         if (
                             response &&
@@ -227,7 +246,7 @@ self.addEventListener("fetch", function(event) {
 
                             caches.open(CACHE_NAME)
 
-                                .then(function(cache) {
+                                .then(cache => {
 
                                     cache.put(
                                         request,
@@ -242,7 +261,7 @@ self.addEventListener("fetch", function(event) {
 
                     })
 
-                    .catch(function() {
+                    .catch(() => {
 
                         return caches.match(
                             "./index.html"
