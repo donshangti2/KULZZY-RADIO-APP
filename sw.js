@@ -4,12 +4,13 @@
    FAST + RELIABLE APP LOADING
 ========================================================= */
 
-const CACHE_NAME = "kulzzy-radio-app-v2";
+const CACHE_NAME = "kulzzy-radio-app-v3";
 
 const APP_SHELL = [
     "./",
     "./index.html",
     "./manifest.json",
+    "./install.js",
     "./icon-192.png",
     "./icon-512.png"
 ];
@@ -87,8 +88,6 @@ self.addEventListener("activate", event => {
 
 /* =========================================================
    FETCH
-   APP SHELL = CACHE FIRST
-   OTHER FILES = NETWORK WITH SAFE FALLBACK
 ========================================================= */
 
 self.addEventListener("fetch", event => {
@@ -97,7 +96,7 @@ self.addEventListener("fetch", event => {
 
 
     /* -----------------------------------------------------
-       ONLY HANDLE GET REQUESTS
+       ONLY GET REQUESTS
     ----------------------------------------------------- */
 
     if (request.method !== "GET") {
@@ -111,80 +110,21 @@ self.addEventListener("fetch", event => {
 
 
     /* -----------------------------------------------------
-       KEEP EXTERNAL SERVICES OUT OF THE APP CACHE
-       Firebase, radio player, APIs, etc.
-    ----------------------------------------------------- */
-
-    const isExternal =
-        url.origin !== self.location.origin;
-
-
-    /* -----------------------------------------------------
-       MAIN KULZZY APP
-       CACHE FIRST
+       EXTERNAL SERVICES
        
-       This makes the already-loaded app open immediately
-       even when the internet is slow.
+       Firebase, radio player, APIs, etc.
+       are NOT cached by this service worker.
     ----------------------------------------------------- */
 
-    if (!isExternal) {
+    if (url.origin !== self.location.origin) {
 
         event.respondWith(
 
-            caches.match(request)
+            fetch(request)
 
-                .then(cachedResponse => {
+                .catch(() => {
 
-                    if (cachedResponse) {
-
-                        return cachedResponse;
-
-                    }
-
-
-                    return fetch(request)
-
-                        .then(networkResponse => {
-
-                            if (
-
-                                networkResponse &&
-                                networkResponse.ok
-
-                            ) {
-
-                                const responseClone =
-                                    networkResponse.clone();
-
-
-                                caches.open(CACHE_NAME)
-
-                                    .then(cache => {
-
-                                        cache.put(
-                                            request,
-                                            responseClone
-                                        );
-
-                                    });
-
-                            }
-
-
-                            return networkResponse;
-
-                        })
-
-                        .catch(() => {
-
-                            /* ------------------------------------------------
-                               If a page/file cannot be reached,
-                               try the cached app shell.
-                            ------------------------------------------------ */
-
-                            return caches.match("./index.html");
-
-                        });
+                    return caches.match(request);
 
                 })
 
@@ -196,19 +136,135 @@ self.addEventListener("fetch", event => {
 
 
     /* =====================================================
-       EXTERNAL REQUESTS
+       NAVIGATION / HTML
        
-       Do NOT allow Firebase/player/external services to
-       block the main application.
+       NETWORK FIRST
+       
+       This prevents an old cached index.html from keeping
+       the app stuck on an older version.
+    ===================================================== */
+
+    if (
+        request.mode === "navigate" ||
+        request.destination === "document"
+    ) {
+
+        event.respondWith(
+
+            fetch(request)
+
+                .then(networkResponse => {
+
+                    if (
+                        networkResponse &&
+                        networkResponse.ok
+                    ) {
+
+                        const responseClone =
+                            networkResponse.clone();
+
+                        caches.open(CACHE_NAME)
+
+                            .then(cache => {
+
+                                cache.put(
+                                    request,
+                                    responseClone
+                                );
+
+                            });
+
+                    }
+
+                    return networkResponse;
+
+                })
+
+                .catch(() => {
+
+                    return caches.match(
+                        request
+                    )
+
+                    .then(cachedPage => {
+
+                        if (cachedPage) {
+
+                            return cachedPage;
+
+                        }
+
+                        return caches.match(
+                            "./index.html"
+                        );
+
+                    });
+
+                })
+
+        );
+
+        return;
+
+    }
+
+
+    /* =====================================================
+       OTHER SAME-ORIGIN FILES
+       
+       CACHE FIRST
+       NETWORK FALLBACK
     ===================================================== */
 
     event.respondWith(
 
-        fetch(request)
+        caches.match(request)
 
-            .catch(() => {
+            .then(cachedResponse => {
 
-                return caches.match(request);
+                if (cachedResponse) {
+
+                    return cachedResponse;
+
+                }
+
+
+                return fetch(request)
+
+                    .then(networkResponse => {
+
+                        if (
+                            networkResponse &&
+                            networkResponse.ok
+                        ) {
+
+                            const responseClone =
+                                networkResponse.clone();
+
+                            caches.open(CACHE_NAME)
+
+                                .then(cache => {
+
+                                    cache.put(
+                                        request,
+                                        responseClone
+                                    );
+
+                                });
+
+                        }
+
+                        return networkResponse;
+
+                    })
+
+                    .catch(() => {
+
+                        return caches.match(
+                            "./index.html"
+                        );
+
+                    });
 
             })
 
