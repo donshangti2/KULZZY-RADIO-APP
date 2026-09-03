@@ -12,8 +12,7 @@
        INSTALL PROMPT
     ===================================================== */
 
-var deferredInstallPrompt =
-    window.kulzzyInstallPrompt || null;
+    var deferredInstallPrompt = null;
 
 
     /* =====================================================
@@ -24,11 +23,12 @@ var deferredInstallPrompt =
 
         if (
             window.matchMedia &&
-            window.matchMedia("(display-mode: standalone)").matches
+            window.matchMedia(
+                "(display-mode: standalone)"
+            ).matches
         ) {
             return true;
         }
-
 
         if (
             window.navigator.standalone === true
@@ -36,27 +36,13 @@ var deferredInstallPrompt =
             return true;
         }
 
-
         return false;
 
     }
 
 
     /* =====================================================
-       IOS DETECTION
-    ===================================================== */
-
-    function isIOS() {
-
-        return /iphone|ipad|ipod/i.test(
-            navigator.userAgent
-        );
-
-    }
-
-
-    /* =====================================================
-       IOS SAFARI DETECTION
+       IOS SAFARI
     ===================================================== */
 
     function isIOSSafari() {
@@ -82,7 +68,7 @@ var deferredInstallPrompt =
 
 
     /* =====================================================
-       ANDROID DETECTION
+       ANDROID
     ===================================================== */
 
     function isAndroid() {
@@ -95,23 +81,26 @@ var deferredInstallPrompt =
 
 
     /* =====================================================
-       CAPTURE REAL BROWSER INSTALL PROMPT
+       CAPTURE REAL INSTALL PROMPT
+
+       IMPORTANT:
+       We DO NOT block the browser's event.
+       We save it so the INSTALL APP button can
+       use the real browser installation window.
     ===================================================== */
 
     window.addEventListener(
         "beforeinstallprompt",
         function (event) {
 
-            event.preventDefault();
-
             deferredInstallPrompt = event;
 
+            window.kulzzyInstallPrompt = event;
 
             var button =
                 document.getElementById(
                     "kulzzyInstallButton"
                 );
-
 
             if (button) {
 
@@ -128,6 +117,24 @@ var deferredInstallPrompt =
 
 
     /* =====================================================
+       APP INSTALLED
+    ===================================================== */
+
+    window.addEventListener(
+        "appinstalled",
+        function () {
+
+            deferredInstallPrompt = null;
+
+            window.kulzzyInstallPrompt = null;
+
+            closeInstallScreen();
+
+        }
+    );
+
+
+    /* =====================================================
        CREATE INSTALL SCREEN
     ===================================================== */
 
@@ -136,7 +143,6 @@ var deferredInstallPrompt =
         if (isInstalled()) {
             return;
         }
-
 
         if (
             document.getElementById(
@@ -149,7 +155,6 @@ var deferredInstallPrompt =
 
         var screen =
             document.createElement("div");
-
 
         screen.id =
             "kulzzyInstallScreen";
@@ -171,16 +176,12 @@ var deferredInstallPrompt =
 
 
                 <div class="kulzzyInstallTitle">
-
                     INSTALL KULZZY RADIO
-
                 </div>
 
 
                 <div class="kulzzyInstallLive">
-
                     🔴 JOIN US LIVE ON-AIR
-
                 </div>
 
 
@@ -188,10 +189,8 @@ var deferredInstallPrompt =
                     id="kulzzyInstallMessage"
                     class="kulzzyInstallMessage"
                 >
-
                     Install Kulzzy Radio on your
                     device for quick and easy access.
-
                 </div>
 
 
@@ -200,9 +199,7 @@ var deferredInstallPrompt =
                     class="kulzzyInstallButton"
                     type="button"
                 >
-
                     📲 INSTALL APP
-
                 </button>
 
 
@@ -211,9 +208,7 @@ var deferredInstallPrompt =
                     class="kulzzyContinueButton"
                     type="button"
                 >
-
                     CONTINUE TO KULZZY RADIO
-
                 </button>
 
 
@@ -229,15 +224,11 @@ var deferredInstallPrompt =
 
         document.body.appendChild(screen);
 
-
         addInstallStyles();
-
 
         setupInstallButton();
 
-
         setupContinueButton();
-
 
         updateInstallScreen();
 
@@ -245,7 +236,7 @@ var deferredInstallPrompt =
 
 
     /* =====================================================
-       INSTALL SCREEN CSS
+       STYLES
     ===================================================== */
 
     function addInstallStyles() {
@@ -261,7 +252,6 @@ var deferredInstallPrompt =
 
         var style =
             document.createElement("style");
-
 
         style.id =
             "kulzzyInstallStyles";
@@ -329,7 +319,8 @@ var deferredInstallPrompt =
 
                 border-radius: 24px;
 
-                padding: 25px 20px 22px;
+                padding:
+                    25px 20px 22px;
 
                 box-shadow:
                     0 0 35px
@@ -489,8 +480,7 @@ var deferredInstallPrompt =
 
                 border-radius: 14px;
 
-                background:
-                    transparent;
+                background: transparent;
 
                 color: white;
 
@@ -583,7 +573,6 @@ var deferredInstallPrompt =
                 "kulzzyInstallButton"
             );
 
-
         if (!button) {
             return;
         }
@@ -595,7 +584,7 @@ var deferredInstallPrompt =
 
 
                 /* =========================================
-                   REAL PWA INSTALL
+                   REAL BROWSER INSTALL
                 ========================================= */
 
                 if (deferredInstallPrompt) {
@@ -604,10 +593,9 @@ var deferredInstallPrompt =
 
                         deferredInstallPrompt.prompt();
 
-
                         var result =
-                            await deferredInstallPrompt.userChoice;
-
+                            await
+                            deferredInstallPrompt.userChoice;
 
                         if (
                             result &&
@@ -619,8 +607,9 @@ var deferredInstallPrompt =
 
                         }
 
+                        deferredInstallPrompt = null;
 
-                        deferredInstallPrompt =
+                        window.kulzzyInstallPrompt =
                             null;
 
                     }
@@ -650,7 +639,7 @@ var deferredInstallPrompt =
 
 
                 /* =========================================
-                   ANDROID / OTHER BROWSERS
+                   OTHER DEVICES
                 ========================================= */
 
                 showManualInstructions();
@@ -662,7 +651,7 @@ var deferredInstallPrompt =
 
 
     /* =====================================================
-       CONTINUE BUTTON
+       CONTINUE
     ===================================================== */
 
     function setupContinueButton() {
@@ -671,7 +660,6 @@ var deferredInstallPrompt =
             document.getElementById(
                 "kulzzyContinueButton"
             );
-
 
         if (!button) {
             return;
@@ -691,7 +679,7 @@ var deferredInstallPrompt =
 
 
     /* =====================================================
-       CLOSE INSTALL SCREEN
+       CLOSE
     ===================================================== */
 
     function closeInstallScreen() {
@@ -701,15 +689,12 @@ var deferredInstallPrompt =
                 "kulzzyInstallScreen"
             );
 
-
         if (!screen) {
             return;
         }
 
 
-        screen.style.opacity =
-            "0";
-
+        screen.style.opacity = "0";
 
         screen.style.transition =
             "opacity .25s ease";
@@ -719,9 +704,7 @@ var deferredInstallPrompt =
             function () {
 
                 if (screen) {
-
                     screen.remove();
-
                 }
 
             },
@@ -732,7 +715,7 @@ var deferredInstallPrompt =
 
 
     /* =====================================================
-       IOS INSTALL INSTRUCTIONS
+       IOS
     ===================================================== */
 
     function showIOSInstructions() {
@@ -741,7 +724,6 @@ var deferredInstallPrompt =
             document.getElementById(
                 "kulzzyInstallMessage"
             );
-
 
         var help =
             document.getElementById(
@@ -765,17 +747,21 @@ var deferredInstallPrompt =
 
             help.innerHTML = `
 
-                <strong>iPhone / iPad:</strong><br><br>
+                <strong>iPhone / iPad:</strong>
+                <br><br>
 
                 1. Tap the
                 <strong>Share</strong>
-                button in Safari.<br><br>
+                button in Safari.
+                <br><br>
 
                 2. Scroll down and tap
-                <strong>Add to Home Screen</strong>.<br><br>
+                <strong>Add to Home Screen</strong>.
+                <br><br>
 
                 3. Tap
-                <strong>Add</strong>.<br><br>
+                <strong>Add</strong>.
+                <br><br>
 
                 Kulzzy Radio will then appear
                 on your Home Screen.
@@ -802,7 +788,7 @@ var deferredInstallPrompt =
 
 
     /* =====================================================
-       MANUAL INSTALL INSTRUCTIONS
+       MANUAL INSTALL
     ===================================================== */
 
     function showManualInstructions() {
@@ -811,7 +797,6 @@ var deferredInstallPrompt =
             document.getElementById(
                 "kulzzyInstallMessage"
             );
-
 
         var help =
             document.getElementById(
@@ -822,7 +807,7 @@ var deferredInstallPrompt =
         if (message) {
 
             message.innerHTML =
-                "Your browser does not allow automatic installation here. Use your browser's Install or Add to Home Screen option.";
+                "Your device can still add Kulzzy Radio to your Home Screen. Use your browser's Install or Add to Home Screen option.";
 
         }
 
@@ -837,11 +822,12 @@ var deferredInstallPrompt =
 
                 help.innerHTML = `
 
-                    <strong>Android:</strong><br><br>
+                    <strong>Android:</strong>
+                    <br><br>
 
-                    Open your browser menu
+                    Open the browser menu
                     <strong>⋮</strong>
-                    and choose
+                    and select
                     <strong>Install app</strong>
                     or
                     <strong>Add to Home screen</strong>.
@@ -854,12 +840,13 @@ var deferredInstallPrompt =
 
                 help.innerHTML = `
 
-                    <strong>Computer:</strong><br><br>
+                    <strong>Computer:</strong>
+                    <br><br>
 
                     Look for the
                     <strong>Install</strong>
-                    button in your browser's
-                    address bar or browser menu.
+                    option in your browser
+                    address bar or menu.
 
                 `;
 
@@ -871,7 +858,7 @@ var deferredInstallPrompt =
 
 
     /* =====================================================
-       UPDATE INSTALL SCREEN
+       UPDATE SCREEN
     ===================================================== */
 
     function updateInstallScreen() {
@@ -881,74 +868,27 @@ var deferredInstallPrompt =
                 "kulzzyInstallButton"
             );
 
-
         if (!button) {
             return;
         }
 
 
-        /*
-         * REAL INSTALL PROMPT AVAILABLE
-         */
+        button.style.display =
+            "block";
+
 
         if (deferredInstallPrompt) {
 
             button.innerHTML =
                 "📲 INSTALL APP";
 
-            button.style.display =
-                "block";
-
-            return;
-
         }
-
-
-        /*
-         * IOS
-         */
-
-        if (isIOSSafari()) {
-
-            button.style.display =
-                "block";
-
-            return;
-
-        }
-
-
-        /*
-         * KEEP BUTTON AVAILABLE
-         * FOR BROWSERS THAT PROVIDE
-         * THEIR OWN INSTALL OPTION
-         */
-
-        button.style.display =
-            "block";
 
     }
 
 
     /* =====================================================
-       APP INSTALLED
-    ===================================================== */
-
-    window.addEventListener(
-        "appinstalled",
-        function () {
-
-            deferredInstallPrompt =
-                null;
-
-            closeInstallScreen();
-
-        }
-    );
-
-
-    /* =====================================================
-       WHEN PAGE IS READY
+       START
     ===================================================== */
 
     function startInstallSystem() {
@@ -961,22 +901,21 @@ var deferredInstallPrompt =
         createInstallScreen();
 
 
-        /*
-         * Give the browser time to
-         * provide beforeinstallprompt.
-         */
-
         setTimeout(
             function () {
 
                 updateInstallScreen();
 
             },
-            1000
+            500
         );
 
     }
 
+
+    /* =====================================================
+       PAGE READY
+    ===================================================== */
 
     if (
         document.readyState ===
@@ -995,6 +934,5 @@ var deferredInstallPrompt =
         startInstallSystem();
 
     }
-
 
 })();
