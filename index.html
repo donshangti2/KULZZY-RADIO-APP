@@ -1862,22 +1862,17 @@ if(
    INSTALL PROMPT
 ===================================================== */
 
-window.addEventListener(
-    "beforeinstallprompt",
-    function(event){
+window.addEventListener("beforeinstallprompt", function(event){
+    event.preventDefault();
 
-        event.preventDefault();
+    kulzzyInstallPrompt = event;
 
-        kulzzyInstallPrompt =
-            event;
+    /* Make the same real install prompt available
+       to the existing install.js system */
+    window.kulzzyInstallPrompt = event;
 
-
-        console.log(
-            "Kulzzy Radio installation is available"
-        );
-
-    }
-);
+    console.log("Kulzzy Radio installation is available");
+});
 
 
 /* =====================================================
