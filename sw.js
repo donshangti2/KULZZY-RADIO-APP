@@ -1,115 +1,217 @@
-const CACHE_NAME = "kulzzy-radio-v2";
+/* =========================================================
+   KULZZY RADIO NETWORK
+   SERVICE WORKER
+   FAST + RELIABLE APP LOADING
+========================================================= */
+
+const CACHE_NAME = "kulzzy-radio-app-v2";
 
 const APP_SHELL = [
-  "./",
-  "./index.html",
-  "./manifest.json",
-  "./icon-192.png",
-  "./icon-512.png",
-  "./logo.jpg"
+    "./",
+    "./index.html",
+    "./manifest.json",
+    "./icon-192.png",
+    "./icon-512.png"
 ];
 
 
-/* =====================================================
-   INSTALL NEW VERSION
-===================================================== */
+/* =========================================================
+   INSTALL
+========================================================= */
 
 self.addEventListener("install", event => {
 
-  event.waitUntil(
+    event.waitUntil(
 
-    caches.open(CACHE_NAME).then(cache => {
+        caches.open(CACHE_NAME)
 
-      return cache.addAll(APP_SHELL);
+            .then(cache => {
 
-    })
+                return cache.addAll(APP_SHELL);
 
-  );
+            })
 
-  self.skipWaiting();
+            .then(() => {
+
+                return self.skipWaiting();
+
+            })
+
+    );
 
 });
 
 
-/* =====================================================
-   ACTIVATE NEW VERSION
-===================================================== */
+/* =========================================================
+   ACTIVATE
+========================================================= */
 
 self.addEventListener("activate", event => {
 
-  event.waitUntil(
+    event.waitUntil(
 
-    caches.keys().then(cacheNames => {
+        caches.keys()
 
-      return Promise.all(
+            .then(cacheNames => {
 
-        cacheNames
+                return Promise.all(
 
-          .filter(name => name !== CACHE_NAME)
+                    cacheNames
 
-          .map(name => caches.delete(name))
+                        .filter(name => {
 
-      );
+                            return name !== CACHE_NAME;
 
-    })
+                        })
 
-  );
+                        .map(name => {
 
-  self.clients.claim();
+                            return caches.delete(name);
 
-});
+                        })
 
+                );
 
-/* =====================================================
-   RECEIVE UPDATE COMMAND
-===================================================== */
+            })
 
-self.addEventListener("message", event => {
+            .then(() => {
 
-  if(
-    event.data &&
-    event.data.action === "SKIP_WAITING"
-  ){
+                return self.clients.claim();
 
-    self.skipWaiting();
+            })
 
-  }
+    );
 
 });
 
 
-/* =====================================================
-   ALWAYS CHECK INTERNET FIRST
-===================================================== */
+/* =========================================================
+   FETCH
+   APP SHELL = CACHE FIRST
+   OTHER FILES = NETWORK WITH SAFE FALLBACK
+========================================================= */
 
 self.addEventListener("fetch", event => {
 
-  if(event.request.method !== "GET") return;
+    const request = event.request;
 
-  event.respondWith(
 
-    fetch(event.request)
+    /* -----------------------------------------------------
+       ONLY HANDLE GET REQUESTS
+    ----------------------------------------------------- */
 
-      .then(response => {
+    if (request.method !== "GET") {
 
-        const copy = response.clone();
+        return;
 
-        caches.open(CACHE_NAME).then(cache => {
+    }
 
-          cache.put(event.request, copy);
 
-        });
+    const url = new URL(request.url);
 
-        return response;
 
-      })
+    /* -----------------------------------------------------
+       KEEP EXTERNAL SERVICES OUT OF THE APP CACHE
+       Firebase, radio player, APIs, etc.
+    ----------------------------------------------------- */
 
-      .catch(() => {
+    const isExternal =
+        url.origin !== self.location.origin;
 
-        return caches.match(event.request);
 
-      })
+    /* -----------------------------------------------------
+       MAIN KULZZY APP
+       CACHE FIRST
+       
+       This makes the already-loaded app open immediately
+       even when the internet is slow.
+    ----------------------------------------------------- */
 
-  );
+    if (!isExternal) {
+
+        event.respondWith(
+
+            caches.match(request)
+
+                .then(cachedResponse => {
+
+                    if (cachedResponse) {
+
+                        return cachedResponse;
+
+                    }
+
+
+                    return fetch(request)
+
+                        .then(networkResponse => {
+
+                            if (
+
+                                networkResponse &&
+                                networkResponse.ok
+
+                            ) {
+
+                                const responseClone =
+                                    networkResponse.clone();
+
+
+                                caches.open(CACHE_NAME)
+
+                                    .then(cache => {
+
+                                        cache.put(
+                                            request,
+                                            responseClone
+                                        );
+
+                                    });
+
+                            }
+
+
+                            return networkResponse;
+
+                        })
+
+                        .catch(() => {
+
+                            /* ------------------------------------------------
+                               If a page/file cannot be reached,
+                               try the cached app shell.
+                            ------------------------------------------------ */
+
+                            return caches.match("./index.html");
+
+                        });
+
+                })
+
+        );
+
+        return;
+
+    }
+
+
+    /* =====================================================
+       EXTERNAL REQUESTS
+       
+       Do NOT allow Firebase/player/external services to
+       block the main application.
+    ===================================================== */
+
+    event.respondWith(
+
+        fetch(request)
+
+            .catch(() => {
+
+                return caches.match(request);
+
+            })
+
+    );
 
 });
