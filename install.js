@@ -12,7 +12,8 @@
        INSTALL PROMPT
     ===================================================== */
 
-    var deferredInstallPrompt = null;
+var deferredInstallPrompt =
+    window.kulzzyInstallPrompt || null;
 
 
     /* =====================================================
