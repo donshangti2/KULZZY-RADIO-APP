@@ -1,23 +1,28 @@
 {
-  "id": "/app/",
+  "id": "./",
   "name": "Kulzzy Radio Network",
   "short_name": "Kulzzy Radio",
   "description": "Kulzzy Radio Network — Celebrating Lives Everyday",
-  "start_url": "/app/",
-  "scope": "/app/",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
-  "orientation": "portrait",
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
+  "orientation": "any",
   "background_color": "#06152B",
   "theme_color": "#06152B",
+  "prefer_related_applications": false,
   "icons": [
     {
-      "src": "/app/icon-192.png",
+      "src": "./icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/app/icon-512.png",
+      "src": "./icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
