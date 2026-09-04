@@ -1496,15 +1496,161 @@ await loadingSections[section];
 
 }
 
-finally{
+/* =====================================================
+LOAD NORMAL SECTION
+===================================================== */
 
-delete loadingSections[section];
+async function loadNormalSection(section){
 
-}
+    if(
+        !normalSections.includes(section)
+    ){
 
-}
+        return;
+
+    }
 
 
+    if(
+        loadedSections[section]
+    ){
+
+        return;
+
+    }
+
+
+    if(
+        loadingSections[section]
+    ){
+
+        return loadingSections[section];
+
+    }
+
+
+    if(!db){
+
+        console.error(
+            "Firebase database is not available."
+        );
+
+        return;
+
+    }
+
+
+    loadingSections[section] =
+
+        (async function(){
+
+            try{
+
+                const databaseRequest =
+                    get(
+                        ref(
+                            db,
+                            "kulzzyContent/" + section
+                        )
+                    );
+
+
+                /*
+                   Do not allow a slow Firebase request
+                   to hold the page indefinitely.
+                */
+
+                const timeout =
+                    new Promise(function(_, reject){
+
+                        setTimeout(
+                            function(){
+
+                                reject(
+                                    new Error(
+                                        "Firebase request timeout"
+                                    )
+                                );
+
+                            },
+                            8000
+                        );
+
+                    });
+
+
+                const snapshot =
+                    await Promise.race([
+                        databaseRequest,
+                        timeout
+                    ]);
+
+
+                if(
+                    snapshot &&
+                    snapshot.exists()
+                ){
+
+                    const data =
+                        snapshot.val();
+
+
+                    const html =
+                        getPageHTML(data);
+
+
+                    displayNormalContent(
+                        section,
+                        html
+                    );
+
+                }
+
+                else{
+
+                    loadedSections[section] =
+                        true;
+
+                }
+
+            }
+
+            catch(error){
+
+                console.error(
+                    "Firebase section error:",
+                    section,
+                    error
+                );
+
+
+                /*
+                   Mark the section as finished so
+                   a failed Firebase request does not
+                   keep the application waiting.
+                */
+
+                loadedSections[section] =
+                    true;
+
+            }
+
+        })();
+
+
+    try{
+
+        await loadingSections[section];
+
+    }
+
+    finally{
+
+        delete loadingSections[section];
+
+    }
+
+  }
 /* =====================================================
 MORE PAGES LOADER
 ===================================================== */
