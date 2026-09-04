@@ -1,19 +1,25 @@
 /* =========================================================
    KULZZY RADIO NETWORK
    SERVICE WORKER
-   FAST + RELIABLE APP LOADING
+   VERSION 7
+   FAST + RELIABLE LOADING
 ========================================================= */
 
-const CACHE_NAME = "kulzzy-radio-app-v6";
+const CACHE_NAME = "kulzzy-radio-app-v7";
 
+/*
+   Only cache files that are essential to displaying
+   the application shell.
+
+   Do NOT put JavaScript/CSS files here unless we know
+   their exact current names.
+*/
 const APP_SHELL = [
     "./",
     "./index.html",
     "./manifest.json",
     "./install.js",
-    "./icon-192.png",
-    "./icon-512.png",
-    "./apple-touch-icon.png"
+    "./icon-192.png"
 ];
 
 
@@ -33,13 +39,21 @@ self.addEventListener("install", event => {
 
             })
 
-            .then(() => {
+            .catch(error => {
 
-                return self.skipWaiting();
+                console.error(
+                    "Kulzzy Service Worker install error:",
+                    error
+                );
 
             })
 
     );
+
+    /*
+       Activate the new service worker immediately.
+    */
+    self.skipWaiting();
 
 });
 
@@ -58,19 +72,27 @@ self.addEventListener("activate", event => {
 
                 return Promise.all(
 
-                    cacheNames
+                    cacheNames.map(cacheName => {
 
-                        .filter(name => {
+                        /*
+                           Delete old Kulzzy caches.
+                        */
+                        if(
+                            cacheName.startsWith(
+                                "kulzzy-radio-app-"
+                            ) &&
+                            cacheName !== CACHE_NAME
+                        ){
 
-                            return name !== CACHE_NAME;
+                            return caches.delete(
+                                cacheName
+                            );
 
-                        })
+                        }
 
-                        .map(name => {
+                        return null;
 
-                            return caches.delete(name);
-
-                        })
+                    })
 
                 );
 
@@ -78,29 +100,14 @@ self.addEventListener("activate", event => {
 
             .then(() => {
 
+                /*
+                   Take control of all open pages.
+                */
                 return self.clients.claim();
 
             })
 
     );
-
-});
-
-
-/* =========================================================
-   MESSAGE
-========================================================= */
-
-self.addEventListener("message", event => {
-
-    if (
-        event.data &&
-        event.data.action === "SKIP_WAITING"
-    ) {
-
-        self.skipWaiting();
-
-    }
 
 });
 
@@ -113,21 +120,34 @@ self.addEventListener("fetch", event => {
 
     const request = event.request;
 
-    if (request.method !== "GET") {
+    /*
+       We only handle GET requests.
+    */
+    if(request.method !== "GET"){
 
         return;
 
     }
 
 
-    const url = new URL(request.url);
+    const url = new URL(
+        request.url
+    );
 
 
-    /* -----------------------------------------------------
-       EXTERNAL REQUESTS
-    ----------------------------------------------------- */
+    /* =====================================================
+       EXTERNAL WEB REQUESTS
+       
+       Firebase, Google, radio servers, iframes, etc.
+       
+       Let the browser handle them normally.
+       The service worker must NOT replace a failed
+       external response with index.html.
+    ===================================================== */
 
-    if (url.origin !== self.location.origin) {
+    if(
+        url.origin !== self.location.origin
+    ){
 
         event.respondWith(
 
@@ -135,7 +155,7 @@ self.addEventListener("fetch", event => {
 
                 .catch(() => {
 
-                    return caches.match(request);
+                    return Response.error();
 
                 })
 
@@ -146,40 +166,53 @@ self.addEventListener("fetch", event => {
     }
 
 
-    /* -----------------------------------------------------
-       HTML / PAGE NAVIGATION
-       NETWORK FIRST
-    ----------------------------------------------------- */
+    /* =====================================================
+       NAVIGATION / HTML PAGES
 
-    if (
+       Network first.
+
+       This is important because users should receive
+       the newest version of the app whenever internet
+       is available.
+    ===================================================== */
+
+    if(
         request.mode === "navigate" ||
         request.destination === "document"
-    ) {
+    ){
 
         event.respondWith(
 
-            fetch(request)
+            fetch(
+                request,
+                {
+                    cache: "no-store"
+                }
+            )
 
                 .then(response => {
 
-                    if (
+                    /*
+                       Only cache valid successful responses.
+                    */
+                    if(
                         response &&
                         response.ok
-                    ) {
+                    ){
 
-                        const copy =
+                        const responseClone =
                             response.clone();
 
-                        caches.open(CACHE_NAME)
+                        caches.open(
+                            CACHE_NAME
+                        ).then(cache => {
 
-                            .then(cache => {
+                            cache.put(
+                                request,
+                                responseClone
+                            );
 
-                                cache.put(
-                                    request,
-                                    copy
-                                );
-
-                            });
+                        });
 
                     }
 
@@ -189,16 +222,28 @@ self.addEventListener("fetch", event => {
 
                 .catch(() => {
 
-                    return caches.match(request)
+                    /*
+                       Internet unavailable.
+
+                       First try the exact requested
+                       page from cache.
+                    */
+                    return caches.match(
+                        request
+                    )
 
                         .then(cachedPage => {
 
-                            if (cachedPage) {
+                            if(cachedPage){
 
                                 return cachedPage;
 
                             }
 
+                            /*
+                               If the exact page isn't cached,
+                               use the main app shell.
+                            */
                             return caches.match(
                                 "./index.html"
                             );
@@ -214,10 +259,26 @@ self.addEventListener("fetch", event => {
     }
 
 
-    /* -----------------------------------------------------
-       OTHER SAME-ORIGIN FILES
-       CACHE FIRST
-    ----------------------------------------------------- */
+    /* =====================================================
+       SAME-ORIGIN STATIC FILES
+
+       Examples:
+
+       CSS
+       JavaScript
+       images
+       manifest
+       icons
+       JSON
+       fonts
+       
+       Cache first, then network.
+
+       IMPORTANT:
+       If a CSS/JS/image fails, DO NOT return index.html.
+       Returning HTML for a JavaScript/CSS request can
+       break the application.
+    ===================================================== */
 
     event.respondWith(
 
@@ -225,47 +286,117 @@ self.addEventListener("fetch", event => {
 
             .then(cachedResponse => {
 
-                if (cachedResponse) {
+                if(cachedResponse){
+
+                    /*
+                       Return cached file immediately.
+
+                       At the same time, try to refresh
+                       it from the network.
+                    */
+
+                    fetch(
+                        request,
+                        {
+                            cache: "no-store"
+                        }
+                    )
+
+                        .then(networkResponse => {
+
+                            if(
+                                networkResponse &&
+                                networkResponse.ok
+                            ){
+
+                                caches.open(
+                                    CACHE_NAME
+                                ).then(cache => {
+
+                                    cache.put(
+                                        request,
+                                        networkResponse.clone()
+                                    );
+
+                                });
+
+                            }
+
+                        })
+
+                        .catch(() => {
+
+                            /*
+                               Network refresh failed.
+
+                               Cached version is still valid.
+                            */
+
+                        });
+
 
                     return cachedResponse;
 
                 }
 
 
-                return fetch(request)
+                /*
+                   File isn't cached.
 
-                    .then(response => {
+                   Get it from the network.
+                */
+                return fetch(
+                    request,
+                    {
+                        cache: "no-store"
+                    }
+                )
 
-                        if (
-                            response &&
-                            response.ok
-                        ) {
+                    .then(networkResponse => {
 
-                            const copy =
-                                response.clone();
+                        if(
+                            networkResponse &&
+                            networkResponse.ok
+                        ){
 
-                            caches.open(CACHE_NAME)
+                            const responseClone =
+                                networkResponse.clone();
 
-                                .then(cache => {
+                            caches.open(
+                                CACHE_NAME
+                            ).then(cache => {
 
-                                    cache.put(
-                                        request,
-                                        copy
-                                    );
+                                cache.put(
+                                    request,
+                                    responseClone
+                                );
 
-                                });
+                            });
 
                         }
 
-                        return response;
+                        return networkResponse;
 
                     })
 
                     .catch(() => {
 
-                        return caches.match(
-                            "./index.html"
-                        );
+                        /*
+                           IMPORTANT:
+
+                           Never return index.html here.
+
+                           A failed JS request must remain a
+                           failed JS request.
+
+                           A failed CSS request must remain
+                           a failed CSS request.
+
+                           A failed image request must remain
+                           a failed image request.
+                        */
+
+                        return Response.error();
 
                     });
 
@@ -274,3 +405,35 @@ self.addEventListener("fetch", event => {
     );
 
 });
+
+
+/* =========================================================
+   MESSAGE CONTROL
+========================================================= */
+
+self.addEventListener(
+    "message",
+    event => {
+
+        if(!event.data){
+
+            return;
+
+        }
+
+
+        /*
+           Allows the page to tell the service worker
+           to activate immediately.
+        */
+        if(
+            event.data.type ===
+            "SKIP_WAITING"
+        ){
+
+            self.skipWaiting();
+
+        }
+
+    }
+);
